@@ -26,7 +26,7 @@ export default function Posts() {
     console.log(postList);
   }, []);
   function goToCreate() {
-    navigate(`create`);
+    navigate("create");
   }
 
   function goToEdit(post) {
@@ -83,41 +83,41 @@ export default function Posts() {
             }
             post={post}
             isOpen={open}
-            toggleOpen = {toggleOpen}
+            toggleOpen={toggleOpen}
             handleDelete={() => handleDelete(url, post.id)}
             resource="post"
-          ></UserModal>
+          />
         </Table.Cell>
       </Table.Row>
     );
   });
   if (block) {
     return <div>Please wait</div>;
-  } else
-    return (
-      <div className="container">
-        <h1>Posts</h1>
-        <Table celled>
-          <Table.Header>
-            <Table.Row className="tableheader">
-              <Table.HeaderCell>ID</Table.HeaderCell>
-              <Table.HeaderCell className="tableheader">Title</Table.HeaderCell>
-              <Table.HeaderCell className="tableheader">Body</Table.HeaderCell>
+  }
+  return (
+    <div className="container">
+      <h1>Posts</h1>
+      <Table celled>
+        <Table.Header>
+          <Table.Row className="tableheader">
+            <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell className="tableheader">Title</Table.HeaderCell>
+            <Table.HeaderCell className="tableheader">Body</Table.HeaderCell>
 
-              <Table.HeaderCell
-                textAlign="center"
-                width={"two"}
-                className="tableheader"
-              >
-                Action
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>{tableRows}</Table.Body>
-        </Table>
-        <Button color="green" icon onClick={goToCreate}>
-          <Icon name="add"></Icon>
-        </Button>
-      </div>
-    );
+            <Table.HeaderCell
+              textAlign="center"
+              width={"two"}
+              className="tableheader"
+            >
+              Action
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>{tableRows}</Table.Body>
+      </Table>
+      <Button color="green" icon onClick={goToCreate}>
+        <Icon name="add" />
+      </Button>
+    </div>
+  );
 }

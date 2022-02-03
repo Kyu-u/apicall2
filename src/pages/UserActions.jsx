@@ -19,14 +19,13 @@ export default function UserActions() {
   };
 
   const handleEdit = async () => {
-
     try {
       const response = await editData(`${url}/${params.id}`, user);
       console.log(response);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const handleSubmit = async () => {
     // console.log(user);
@@ -60,35 +59,37 @@ export default function UserActions() {
             <label htmlFor="name">Phone</label>
             <input type="text" onChange={handleChange} name="phone" id="" />
           </FormField>
-          <Button type="submit" onClick={handleEdit}>Update</Button>
-        </Form>
-      </div>
-    );
-  } else
-    return (
-      <div className="container">
-        <h1>Create User</h1>
-        <Form>
-          <FormField>
-            <label htmlFor="name">Name</label>
-            <input type="text" onChange={handleChange} name="name" id="" />
-          </FormField>
-          <FormField>
-            <label htmlFor="name">Username</label>
-            <input type="text" onChange={handleChange} name="username" id="" />
-          </FormField>
-          <FormField>
-            <label htmlFor="name">Email</label>
-            <input type="text" onChange={handleChange} name="email" id="" />
-          </FormField>
-          <FormField>
-            <label htmlFor="name">Phone</label>
-            <input type="text" onChange={handleChange} name="phone" id="" />
-          </FormField>
-          <Button type="submit" onClick={handleSubmit}>
-            Submit
+          <Button type="submit" onClick={handleEdit}>
+            Update
           </Button>
         </Form>
       </div>
     );
+  }
+  return (
+    <div className="container">
+      <h1>Create User</h1>
+      <Form>
+        <FormField>
+          <label htmlFor="name">Name</label>
+          <input type="text" onChange={handleChange} name="name" id="" />
+        </FormField>
+        <FormField>
+          <label htmlFor="name">Username</label>
+          <input type="text" onChange={handleChange} name="username" id="" />
+        </FormField>
+        <FormField>
+          <label htmlFor="name">Email</label>
+          <input type="text" onChange={handleChange} name="email" id="" />
+        </FormField>
+        <FormField>
+          <label htmlFor="name">Phone</label>
+          <input type="text" onChange={handleChange} name="phone" id="" />
+        </FormField>
+        <Button type="submit" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Form>
+    </div>
+  );
 }
