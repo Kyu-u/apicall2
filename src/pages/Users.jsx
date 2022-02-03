@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { getData } from "./services/index";
-import UserModal from "./UserModal";
+import { getData, deleteData } from "../services/index";
+import UserModal from "../components/Modal";
 
 import { useNavigate, Link } from "react-router-dom";
-import {
-  Icon,
-
-  Table,
-  Button,
-
-} from "semantic-ui-react";
-
-// import 'semantic-ui-css/semantic.min.css'
+import { Icon, Table, Button } from "semantic-ui-react";
 const Users = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [block, setBlock] = useState(false);
   const [userList, setUserList] = useState([]);
   const url = "https://jsonplaceholder.typicode.com/users";
+  // function handleYes() {
+  //   setOpen(!open);
+  // }
+  // function handleNo() {
+  //   setOpen(!open)
+  // }
+
+
   async function fetchData() {
     try {
       setBlock(true);
@@ -37,6 +38,13 @@ const Users = () => {
 
   function goToEdit(user) {
     navigate(`${user.id}`, { state: user });
+  }
+  const handleDelete = async (id) => {
+    const response = await deleteData(`${url}/${id}`);
+    console.log(response);
+  };
+  function toggleOpen() {
+    setOpen(!open);
   }
   const tableRows = userList.map((user, i) => {
     // const {  } = user;
@@ -71,8 +79,19 @@ const Users = () => {
             <Icon name="edit"></Icon>
           </Button>
 
-          <UserModal user = {user}></UserModal>
-
+          <UserModal
+            // user={user}
+            title={
+              `Delete User`
+            }
+            content={
+              `Are you sure you want to delete user ${user.id}?`
+            }
+            isOpen={open}
+            toggleOpen = {toggleOpen}
+            handleDelete={() => handleDelete(user.id)}
+            resource="user"
+          ></UserModal>
         </Table.Cell>
       </Table.Row>
     );

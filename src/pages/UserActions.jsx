@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
-import { postData, editData } from "./services";
+import { postData, editData } from "../services";
 export default function UserActions() {
   const params = useParams();
   const location = useLocation();
