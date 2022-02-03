@@ -2,15 +2,22 @@ import React, { useState, useEffect } from "react";
 import { getData } from "../services/index";
 import UserModal from "../components/Modal";
 import { deleteData } from "../services/index";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
 import { Icon, Table, Button } from "semantic-ui-react";
 export default function Posts() {
+  const location = useLocation();
+  const { name } = location.state;
   const navigate = useNavigate();
+  const params = useParams();
+  const { id } = params;
+  // console.log(location);
+  // console.log(id);
   const [open, setOpen] = useState(false);
-
   const [block, setBlock] = useState(false);
   const [postList, setPostList] = useState([]);
-  const url = "https://jsonplaceholder.typicode.com/posts";
+  const [content, setContent] = useState({});
+  const url = `https://jsonplaceholder.typicode.com/posts?userId=${id}`;
+
   async function fetchData() {
     try {
       setBlock(true);
@@ -23,21 +30,26 @@ export default function Posts() {
   }
   useEffect(() => {
     fetchData();
-    console.log(postList);
   }, []);
   function goToCreate() {
-    navigate("create");
+    navigate("create", { state: location.state });
   }
 
   function goToEdit(post) {
     navigate(`${post.id}`, { state: post });
   }
-  const handleDelete = async (url, id) => {
-    const response = await deleteData(`${url}/${id}`);
+  const handleDelete = async (id) => {
+    const response = await deleteData(
+      `https://jsonplaceholder.typicode.com/posts/${id}`
+    );
     console.log(response);
   };
   function toggleOpen() {
     setOpen(!open);
+  }
+  function handleModalButton(content) {
+    setContent(content);
+    toggleOpen();
   }
   const tableRows = postList.map((post, i) => {
     // const {  } = post;
@@ -46,24 +58,7 @@ export default function Posts() {
         <Table.Cell className="tablecell">{post.id}</Table.Cell>
         <Table.Cell className="tablecell">{post.title}</Table.Cell>
         <Table.Cell className="tablecell">{post.body}</Table.Cell>
-        <Table.Cell verticalAlign="" className="actioncell">
-          {/* <Link
-            to={{
-              pathname: `${post.id}`,
-              // state: post,
-            }}
-            replace state={post}
-          >
-            {" "}
-            <Button
-              size="mini"
-              icon
-              color="yellow"
-              onClick={() =>console.log(post)}
-            >
-              <Icon name="edit"></Icon>
-            </Button>
-          </Link> */}
+        <Table.Cell className="actioncell">
           <Button
             size="mini"
             icon
@@ -72,21 +67,23 @@ export default function Posts() {
           >
             <Icon name="edit"></Icon>
           </Button>
+          <Button
+            icon
+            size="mini"
+            onClick={() => {
+              const temp = (
+                <div>
+                  <p>{post.id}</p>
+                  <p>{post.title}</p>
+                  <p>{post.body}</p>
+                </div>
+              );
 
-          <UserModal
-            content={
-              <div>
-                <p>{post.id}</p>
-                <p>{post.title}</p>
-                <p>{post.body}</p>
-              </div>
-            }
-            post={post}
-            isOpen={open}
-            toggleOpen={toggleOpen}
-            handleDelete={() => handleDelete(url, post.id)}
-            resource="post"
-          />
+              handleModalButton(temp);
+            }}
+          >
+            <Icon name="delete" />
+          </Button>
         </Table.Cell>
       </Table.Row>
     );
@@ -96,7 +93,14 @@ export default function Posts() {
   }
   return (
     <div className="container">
-      <h1>Posts</h1>
+      <UserModal
+        content={content}
+        isOpen={open}
+        toggleOpen={toggleOpen}
+        handleDelete={() => handleDelete(content.id)}
+        resource="post"
+      />
+      <h1>{name} - Posts</h1>
       <Table celled>
         <Table.Header>
           <Table.Row className="tableheader">

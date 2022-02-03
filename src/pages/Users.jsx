@@ -29,12 +29,13 @@ const Users = () => {
   }
   useEffect(() => {
     fetchData();
-    console.log(userList);
   }, []);
   function goToCreate() {
     navigate("create");
   }
-
+  function goToPosts(user) {
+    navigate(`${user.id}/posts`, { state: user });
+  }
   function goToEdit(user) {
     navigate(`${user.id}`, { state: user });
   }
@@ -75,7 +76,11 @@ const Users = () => {
             color="yellow"
             onClick={() => goToEdit(user)}
           >
-            <Icon name="edit"></Icon>
+            <Icon name="edit"/>
+          </Button>
+
+          <Button icon size="mini" color="grey" onClick={() => {goToPosts(user)}}>
+            <Icon name="info"/>
           </Button>
 
           <UserModal

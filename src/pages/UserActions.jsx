@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { postData, editData } from "../services";
 export default function UserActions() {
+  const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
   const url = "https://jsonplaceholder.typicode.com/users";
-  // console.log('location', location);
   const [user, setUser] = useState({});
-  const user2 = location.state;
-  console.log(user2);
+  const {name,username,email,phone} = location.state;
+  // console.log(user2);
   const handleChange = (e) => {
     const temp = {
       ...user,
@@ -22,6 +22,7 @@ export default function UserActions() {
     try {
       const response = await editData(`${url}/${params.id}`, user);
       console.log(response);
+      navigate('users');
     } catch (error) {
       console.error(error);
     }
@@ -41,23 +42,23 @@ export default function UserActions() {
     return (
       <div className="container">
         <h1>Edit User</h1>
-        <h2>{user2.name}</h2>
+        <h2>{name}</h2>
         <Form>
           <FormField>
             <label htmlFor="name">Name</label>
-            <input type="text" onChange={handleChange} name="name" id="" />
+            <input type="text" onChange={handleChange} defaultValue={name} name="name" id="" />
           </FormField>
           <FormField>
             <label htmlFor="name">Username</label>
-            <input type="text" onChange={handleChange} name="username" id="" />
-          </FormField>
+            <input type="text" onChange={handleChange} defaultValue={username} name="username" id="" />
+          </FormField>  
           <FormField>
             <label htmlFor="name">Email</label>
-            <input type="text" onChange={handleChange} name="email" id="" />
+            <input type="text" onChange={handleChange} defaultValue={email} name="email" id="" />
           </FormField>
           <FormField>
             <label htmlFor="name">Phone</label>
-            <input type="text" onChange={handleChange} name="phone" id="" />
+            <input type="text" onChange={handleChange} defaultValue={phone} name="phone" id="" />
           </FormField>
           <Button type="submit" onClick={handleEdit}>
             Update
