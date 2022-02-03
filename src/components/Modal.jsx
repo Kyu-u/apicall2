@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 export default function UserModal(props) {
   const { isOpen, handleDelete,content, title, toggleOpen } = props;
-  console.log(`content`,content);
+  // console.log(`content`,content);
   const url = "https://jsonplaceholder.typicode.com/";
 
   function handleYes() {

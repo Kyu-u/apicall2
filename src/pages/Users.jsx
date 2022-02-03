@@ -9,6 +9,8 @@ const Users = () => {
   const [open, setOpen] = useState(false);
   const [block, setBlock] = useState(false);
   const [userList, setUserList] = useState([]);
+  const [content, setContent] = useState({});
+
   const url = "https://jsonplaceholder.typicode.com/users";
   // function handleYes() {
   //   setOpen(!open);
@@ -46,6 +48,11 @@ const Users = () => {
   function toggleOpen() {
     setOpen(!open);
   }
+  // function handleModalButton(content, id) {
+  //   // setContent(content);
+  //   // setContent({...content, id: id });
+  //   toggleOpen();
+  // }
   const tableRows = userList.map((user, i) => {
     // const {  } = user;
     return (
@@ -76,22 +83,35 @@ const Users = () => {
             color="yellow"
             onClick={() => goToEdit(user)}
           >
-            <Icon name="edit"/>
+            <Icon name="edit" />
           </Button>
 
-          <Button icon size="mini" color="grey" onClick={() => {goToPosts(user)}}>
-            <Icon name="info"/>
+          <Button
+            icon
+            size="mini"
+            color="grey"
+            onClick={() => {
+              goToPosts(user);
+            }}
+          >
+            <Icon name="info" />
           </Button>
+          <Button
+            icon
+            size="mini"
+            onClick={() => {
+              const temp = (
+                <div>
+                  <p>{user.id}</p>
+                  <p>{user.name}</p>
+                </div>
+              );
 
-          <UserModal
-            // user={user}
-            title={"Delete User"}
-            content={`Are you sure you want to delete user ${user.id}?`}
-            isOpen={open}
-            toggleOpen={toggleOpen}
-            handleDelete={() => handleDelete(user.id)}
-            resource="user"
-          />
+              setContent({temp, id: user.id})
+              // handleModalButton(temp);
+              toggleOpen();
+            }}
+          ><Icon name="delete"/></Button>
         </Table.Cell>
       </Table.Row>
     );
@@ -101,6 +121,15 @@ const Users = () => {
   }
   return (
     <div className="container">
+      <UserModal
+        // user={user}
+        title={"Delete User"}
+        content={`Are you sure you want to delete user ${content.id}?`}
+        isOpen={open}
+        toggleOpen={toggleOpen}
+        handleDelete={() => handleDelete(content.id)}
+        resource="user"
+      />
       <h1>Users</h1>
       <Table celled>
         <Table.Header>

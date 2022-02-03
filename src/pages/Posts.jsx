@@ -47,10 +47,10 @@ export default function Posts() {
   function toggleOpen() {
     setOpen(!open);
   }
-  function handleModalButton(content) {
-    setContent(content);
-    toggleOpen();
-  }
+  // function handleModalButton(content) {
+  //   setContent(content);
+  //   toggleOpen();
+  // }
   const tableRows = postList.map((post, i) => {
     // const {  } = post;
     return (
@@ -79,7 +79,9 @@ export default function Posts() {
                 </div>
               );
 
-              handleModalButton(temp);
+              setContent({temp, id: post.id})
+              // handleModalButton(temp);
+              toggleOpen();
             }}
           >
             <Icon name="delete" />
