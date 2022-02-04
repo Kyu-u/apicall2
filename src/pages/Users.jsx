@@ -107,11 +107,13 @@ const Users = () => {
                 </div>
               );
 
-              setContent({temp, id: user.id})
+              setContent({ ...temp, id: user.id });
               // handleModalButton(temp);
               toggleOpen();
             }}
-          ><Icon name="delete"/></Button>
+          >
+            <Icon name="delete" />
+          </Button>
         </Table.Cell>
       </Table.Row>
     );

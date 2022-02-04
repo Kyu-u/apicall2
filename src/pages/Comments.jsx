@@ -13,6 +13,7 @@ export default function Comments() {
   const [commentList, setCommentList] = useState([]);
   const [commentAmount, setCommentAmount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [content, setContent] = useState({});
 
   const url = `https://jsonplaceholder.typicode.com/comments`;
   async function fetchData() {
@@ -43,7 +44,6 @@ export default function Comments() {
     // loadPage();
   }, []);
 
-
   function goToCreate() {
     navigate("create");
   }
@@ -51,7 +51,7 @@ export default function Comments() {
   function goToEdit(comment) {
     navigate(`${comment.id}`, { state: comment });
   }
-  const handleDelete = async (url, id) => {
+  const handleDelete = async (id) => {
     const response = await deleteData(`${url}/${id}`);
     console.log(response);
   };
@@ -66,7 +66,7 @@ export default function Comments() {
         <Table.Cell className="tablecell">{comment.postId}</Table.Cell>
         <Table.Cell className="tablecell">{comment.name}</Table.Cell>
         <Table.Cell className="tablecell">{comment.body}</Table.Cell>
-        <Table.Cell verticalAlign="" className="actioncell">
+        <Table.Cell className="actioncell">
           {/* <Link
             to={{
               pathname: `${comment.id}`,
@@ -92,21 +92,23 @@ export default function Comments() {
           >
             <Icon name="edit"></Icon>
           </Button>
+          <Button
+            icon
+            size="mini"
+            onClick={() => {
+              const temp = (
+                <div>
+                  <p>{comment.id}</p>
+                  <p>{comment.name}</p>
+                  <p>{comment.body}</p>
+                </div>
+              );
 
-          <UserModal
-            content={
-              <div>
-                <p>{comment.id}</p>
-                <p>{comment.title}</p>
-                <p>{comment.body}</p>
-              </div>
-            }
-            comment={comment}
-            isOpen={open}
-            toggleOpen={toggleOpen}
-            handleDelete={() => handleDelete(url, comment.id)}
-            resource="comment"
-          />
+              setContent({ ...temp, id: comment.id });
+              // handleModalButton(temp);
+              toggleOpen();
+            }}
+          > <Icon name="delete"/></Button>
         </Table.Cell>
       </Table.Row>
     );
@@ -116,6 +118,14 @@ export default function Comments() {
   }
   return (
     <div className="container">
+      <UserModal
+        title={"Delete Comment"}
+        content={content}
+        isOpen={open}
+        toggleOpen={toggleOpen}
+        handleDelete={() => handleDelete(content.id)}
+        resource="post"
+      />
       <h1>Comments</h1>
       <Table celled>
         <Table.Header>
@@ -138,7 +148,11 @@ export default function Comments() {
         <Table.Body>{tableRows}</Table.Body>
       </Table>
 
-      <Paginator commentAmount = {commentAmount} loadPage = {loadPage} activePage = {currentPage} ></Paginator>
+      <Paginator
+        commentAmount={commentAmount}
+        loadPage={loadPage}
+        activePage={currentPage}
+      ></Paginator>
       <Button color="green" icon onClick={goToCreate}>
         <Icon name="add" />
       </Button>

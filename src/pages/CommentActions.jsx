@@ -58,22 +58,5 @@ export default function PostActions() {
       </div>
     );
   }
-  return (
-    <div className="container">
-      <h1>Create Post</h1>
-      <Form>
-        <FormField>
-          <label htmlFor="name">Title</label>
-          <input type="text" onChange={handleChange} name="title" id="" />
-        </FormField>
-        <FormField>
-          <label htmlFor="name">Body</label>
-          <input type="text" onChange={handleChange} name="body" id="" />
-        </FormField>
-        <Button type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
-      </Form>
-    </div>
-  );
+
 }

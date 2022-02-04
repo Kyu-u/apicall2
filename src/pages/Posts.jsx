@@ -79,7 +79,7 @@ export default function Posts() {
                 </div>
               );
 
-              setContent({temp, id: post.id})
+              setContent({ ...temp, id: post.id });
               // handleModalButton(temp);
               toggleOpen();
             }}
@@ -96,6 +96,7 @@ export default function Posts() {
   return (
     <div className="container">
       <UserModal
+        title={"Delete Post"}
         content={content}
         isOpen={open}
         toggleOpen={toggleOpen}
