@@ -8,6 +8,7 @@ import UserActions from "./pages/UserActions";
 import PostActions from "./pages/PostActions";
 import Posts from "./pages/Posts";
 import Comments from "./pages/Comments";
+import CommentActions from "./pages/CommentActions";
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,8 @@ function App() {
           {/* <Route path="posts/:id" element={<PostActions  />} /> */}
           {/* <Route path="posts/create" element={<UserActions />} /> */}
           <Route path="comments" element={<Comments />} />
+          <Route path="comments/:id" element={<CommentActions />} />
+
 
 
 

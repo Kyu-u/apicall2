@@ -1,62 +1,61 @@
 import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
-import { postData, editData } from "../services";
-export default function PostActions() {
+import { commentData, editData } from "../services";
+export default function CommentActions() {
   const params = useParams();
   const location = useLocation();
-  const url = "https://jsonplaceholder.typicode.com/posts";
+  const url = "https://jsonplaceholder.typicode.com/comments";
   // console.log('location', location);
-  const [post, setPost] = useState({});
-  const {title, body} = location.state;
-  // console.log(post2);
+  const [comment, setComment] = useState({});
+  const { name, body } = location.state;
+  // console.log(comment2);
   const handleChange = (e) => {
     const temp = {
-      ...post,
+      ...comment,
       [e.target.name]: e.target.value,
     };
-    setPost(temp);
+    setComment(temp);
   };
 
   const handleEdit = async () => {
     try {
-      const response = await editData(`${url}/${params.id}`, post);
+      const response = await editData(`${url}/${params.id}`, comment);
       console.log(response);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleSubmit = async () => {
-    // console.log(post);
-    try {
-      const response = await postData(url, post);
-      // console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  if (params.id) {
-    return (
-      <div className="container">
-        <h1>Edit Post</h1>
-        <h2>{title}</h2>
-        <Form>
-          <FormField>
-            <label htmlFor="name">Title</label>
-            <input type="text" onChange={handleChange} defaultValue={title} name="title" id="" />
-          </FormField>
-          <FormField>
-            <label htmlFor="name">Body</label>
-            <input type="text" onChange={handleChange} defaultValue={body} name="body" id="" />
-          </FormField>
-          <Button type="submit" onClick={handleEdit}>
-            Update
-          </Button>
-        </Form>
-      </div>
-    );
-  }
-
+  return (
+    <div className="container">
+      <h1>Edit Comment</h1>
+      <h2>{name}</h2>
+      <Form>
+        <FormField>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            onChange={handleChange}
+            defaultValue={name}
+            name="name"
+            id=""
+          />
+        </FormField>
+        <FormField>
+          <label htmlFor="name">Body</label>
+          <input
+            type="text"
+            onChange={handleChange}
+            defaultValue={body}
+            name="body"
+            id=""
+          />
+        </FormField>
+        <Button type="submit" onClick={handleEdit}>
+          Update
+        </Button>
+      </Form>
+    </div>
+  );
 }
