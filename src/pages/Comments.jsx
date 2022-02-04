@@ -5,7 +5,7 @@ import { deleteData } from "../services/index";
 import { useNavigate, Link } from "react-router-dom";
 import Paginator from "../components/Pagination";
 import { commentUrl } from "../constants";
-import { Icon, Table, Button, Menu } from "semantic-ui-react";
+import { Icon, Table, Button, Menu, Segment, Sidebar } from "semantic-ui-react";
 export default function Comments() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -109,7 +109,10 @@ export default function Comments() {
               // handleModalButton(temp);
               toggleOpen();
             }}
-          > <Icon name="delete"/></Button>
+          >
+            {" "}
+            <Icon name="delete" />
+          </Button>
         </Table.Cell>
       </Table.Row>
     );
@@ -118,45 +121,75 @@ export default function Comments() {
     return <div>Please wait</div>;
   }
   return (
-    <div className="container">
-      <UserModal
-        title={"Delete Comment"}
-        content={content}
-        isOpen={open}
-        toggleOpen={toggleOpen}
-        handleDelete={() => handleDelete(content.id)}
-        resource="post"
-      />
-      <h1>Comments</h1>
-      <Table celled>
-        <Table.Header>
-          <Table.Row className="tableheader">
-            <Table.HeaderCell>ID</Table.HeaderCell>
-            <Table.HeaderCell>Post ID</Table.HeaderCell>
+    <Sidebar.Pushable as={Segment}>
+      <Sidebar
+        as={Menu}
+        animation="overlay"
+        icon="labeled"
+        inverted
+        vertical
+        visible
+        width="thin"
+      >
+        <Menu.Item onClick={() => navigate('/users', {replace: true})} as="a">
+          <Icon name="user" />
+          Users
+        </Menu.Item>
+        <Menu.Item as="a">
+          <Icon name="comment" />
+          Comments
+        </Menu.Item>
+      </Sidebar>
 
-            <Table.HeaderCell className="tableheader">Name</Table.HeaderCell>
-            <Table.HeaderCell className="tableheader">Body</Table.HeaderCell>
+      <Sidebar.Pusher>
+        <Segment basic>
+          {" "}
+          <div className="container">
+            <UserModal
+              title={"Delete Comment"}
+              content={content}
+              isOpen={open}
+              toggleOpen={toggleOpen}
+              handleDelete={() => handleDelete(content.id)}
+              resource="post"
+            />
+            <h1>Comments</h1>
+            <Table celled>
+              <Table.Header>
+                <Table.Row className="tableheader">
+                  <Table.HeaderCell>ID</Table.HeaderCell>
+                  <Table.HeaderCell>Post ID</Table.HeaderCell>
 
-            <Table.HeaderCell
-              textAlign="center"
-              width={"two"}
-              className="tableheader"
-            >
-              Action
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>{tableRows}</Table.Body>
-      </Table>
+                  <Table.HeaderCell className="tableheader">
+                    Name
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="tableheader">
+                    Body
+                  </Table.HeaderCell>
 
-      <Paginator
-        commentAmount={commentAmount}
-        loadPage={loadPage}
-        activePage={currentPage}
-      ></Paginator>
-      <Button color="green" icon onClick={goToCreate}>
-        <Icon name="add" />
-      </Button>
-    </div>
+                  <Table.HeaderCell
+                    textAlign="center"
+                    width={"two"}
+                    className="tableheader"
+                  >
+                    Action
+                  </Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>{tableRows}</Table.Body>
+            </Table>
+
+            <Paginator
+              commentAmount={commentAmount}
+              loadPage={loadPage}
+              activePage={currentPage}
+            ></Paginator>
+            <Button color="green" icon onClick={goToCreate}>
+              <Icon name="add" />
+            </Button>
+          </div>
+        </Segment>
+      </Sidebar.Pusher>
+    </Sidebar.Pushable>
   );
 }

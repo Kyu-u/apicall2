@@ -25,4 +25,12 @@ export async function editData(url, data) {
   });
 }
 
+export async function makeRequest(url, method, data) {
+  return await axios({
+    method: method,
+    url: url,
+    data: data,
+  });
+}
+
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
-import { commentData, editData } from "../services";
+import { commentData, editData, makeRequest } from "../services";
 import { commentUrl } from "../constants";
 export default function CommentActions() {
   const params = useParams();
@@ -21,20 +21,30 @@ export default function CommentActions() {
     setComment(temp);
   };
 
-  const handleEdit = async () => {
+  // const handleEdit = async () => {
+  //   try {
+  //     setBlock(true);
+
+  //     const response = await editData(`${commentUrl}/${params.id}`, comment);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setBlock(false);
+
+  //   }
+  // };
+  const handleRequest = async (url,method,data) => {
     try {
       setBlock(true);
-
-      const response = await editData(`${commentUrl}/${params.id}`, comment);
+      const response = await makeRequest(url, method, data);
       console.log(response);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     } finally {
       setBlock(false);
-
     }
-  };
-
+  }
   return (
     <div className="container">
       <h1>Edit Comment</h1>
@@ -60,7 +70,7 @@ export default function CommentActions() {
             id=""
           />
         </FormField>
-        <Button type="submit" onClick={handleEdit}>
+        <Button type="submit" onClick={() => handleRequest(`${commentUrl}/${params.id}`,'put',comment)}>
           Update
         </Button>
       </Form>

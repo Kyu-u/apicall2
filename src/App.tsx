@@ -1,35 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Main from "./pages/Main";
 import Users from "./pages/Users";
+import {
+  Sidebar,
+  Menu,
+  Header,
+  Image,
+  Icon,
+  Segment,
+  Checkbox,
+} from "semantic-ui-react";
 import UserActions from "./pages/UserActions";
 import PostActions from "./pages/PostActions";
 import Posts from "./pages/Posts";
 import Comments from "./pages/Comments";
 import CommentActions from "./pages/CommentActions";
 function App() {
+  const [visible, setVisible] = useState(false);
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="users" element={<Users />} />
-          <Route path="users/:id" element={<UserActions />} />
-          <Route path="users/:id/posts" element={<Posts />} />
-          <Route path="users/:id/posts/:postId" element={<PostActions />} />
-          <Route path="users/:id/posts/create" element={<PostActions  />} />
-          <Route path="users/create" element={<UserActions />} />
-          <Route path="posts" element={<Posts />} />
+          <Route path="/" element={<Navigate to="users" replace />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<UserActions />} />
+          <Route path="/users/:id/posts" element={<Posts />} />
+          <Route path="/users/:id/posts/:postId" element={<PostActions />} />
+          <Route path="/users/:id/posts/create" element={<PostActions />} />
+          <Route path="/users/create" element={<UserActions />} />
+          <Route path="/posts" element={<Posts />} />
           {/* <Route path="posts/:id" element={<PostActions  />} /> */}
           {/* <Route path="posts/create" element={<UserActions />} /> */}
-          <Route path="comments" element={<Comments />} />
-          <Route path="comments/:id" element={<CommentActions />} />
-
-
-
-
+          <Route path="/comments" element={<Comments />} />
+          <Route path="/comments/:id" element={<CommentActions />} />
         </Routes>
       </BrowserRouter>
     </div>

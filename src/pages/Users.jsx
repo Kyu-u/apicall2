@@ -3,7 +3,7 @@ import { getData, deleteData } from "../services/index";
 import UserModal from "../components/Modal";
 
 import { useNavigate, Link } from "react-router-dom";
-import { Icon, Table, Button } from "semantic-ui-react";
+import { Icon, Table, Button, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { userUrl } from "../constants";
 const Users = () => {
   const navigate = useNavigate();
@@ -134,37 +134,64 @@ const Users = () => {
     return <div>Please wait</div>;
   }
   return (
-    <div className="container">
-      <UserModal
-        // user={user}
-        title={"Delete User"}
-        content={`Are you sure you want to delete user ${content.id}?`}
-        isOpen={open}
-        toggleOpen={toggleOpen}
-        handleDelete={() => handleDelete(content.id)}
-        resource="user"
-      />
-      <h1>Users</h1>
-      <Table celled>
-        <Table.Header>
-          <Table.Row className="tableheader">
-            <Table.HeaderCell>User</Table.HeaderCell>
-            <Table.HeaderCell className="tableheader">Email</Table.HeaderCell>
-            <Table.HeaderCell
-              textAlign="center"
-              width={"two"}
-              className="tableheader"
-            >
-              Action
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>{tableRows}</Table.Body>
-      </Table>
-      <Button color="green" icon onClick={() => navigateToPage("create")}>
-        <Icon name="add" />
-      </Button>
-    </div>
+    <Sidebar.Pushable as={Segment}>
+      <Sidebar
+        as={Menu}
+        animation="overlay"
+        icon="labeled"
+        inverted
+        vertical
+        visible
+        width="thin"
+      >
+        <Menu.Item as="a">
+          <Icon name="user" />
+          Users
+        </Menu.Item>
+        <Menu.Item onClick={() => navigate('/comments', {replace: true})} as="a">
+          <Icon name="comment" />
+          Comments
+        </Menu.Item>
+      </Sidebar>
+
+      <Sidebar.Pusher>
+        <Segment basic>
+          <div className="container">
+            <UserModal
+              // user={user}
+              title={"Delete User"}
+              content={`Are you sure you want to delete user ${content.id}?`}
+              isOpen={open}
+              toggleOpen={toggleOpen}
+              handleDelete={() => handleDelete(content.id)}
+              resource="user"
+            />
+            <h1>Users</h1>
+            <Table celled>
+              <Table.Header>
+                <Table.Row className="tableheader">
+                  <Table.HeaderCell>User</Table.HeaderCell>
+                  <Table.HeaderCell className="tableheader">
+                    Email
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    textAlign="center"
+                    width={"two"}
+                    className="tableheader"
+                  >
+                    Action
+                  </Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>{tableRows}</Table.Body>
+            </Table>
+            <Button color="green" icon onClick={() => navigateToPage("/users/create")}>
+              <Icon name="add" />
+            </Button>
+          </div>
+        </Segment>
+      </Sidebar.Pusher>
+    </Sidebar.Pushable>
   );
 };
 
