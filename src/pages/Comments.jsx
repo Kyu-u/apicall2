@@ -3,6 +3,7 @@ import { getData } from "../services/index";
 import UserModal from "../components/Modal";
 import { deleteData } from "../services/index";
 import { useNavigate, Link } from "react-router-dom";
+import Paginator from "../components/Pagination";
 import { Icon, Table, Button, Menu } from "semantic-ui-react";
 export default function Comments() {
   const navigate = useNavigate();
@@ -10,20 +11,39 @@ export default function Comments() {
 
   const [block, setBlock] = useState(false);
   const [commentList, setCommentList] = useState([]);
-  const url = "https://jsonplaceholder.typicode.com/comments";
+  const [commentAmount, setCommentAmount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const url = `https://jsonplaceholder.typicode.com/comments`;
   async function fetchData() {
     try {
       setBlock(true);
       const temp = await getData(url);
+      setCommentAmount(temp.data.length);
+      const temp2 = await getData(`${url}?_page=${currentPage}`);
+      setCommentList(temp2.data);
+      setBlock(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async function loadPage(page) {
+    try {
+      setBlock(true);
+      const temp = await getData(`${url}?_page=${page}`);
       setCommentList(temp.data);
       setBlock(false);
+      setCurrentPage(page);
     } catch (error) {
       console.error(error);
     }
   }
   useEffect(() => {
     fetchData();
+    // loadPage();
   }, []);
+
+
   function goToCreate() {
     navigate("create");
   }
@@ -116,25 +136,9 @@ export default function Comments() {
           </Table.Row>
         </Table.Header>
         <Table.Body>{tableRows}</Table.Body>
-        <Table.Footer>
-      <Table.Row>
-        <Table.HeaderCell colSpan='3'>
-          <Menu floated='right' pagination>
-            <Menu.Item as='a' icon>
-              <Icon name='chevron left' />
-            </Menu.Item>
-            <Menu.Item as='a'>1</Menu.Item>
-            <Menu.Item as='a'>2</Menu.Item>
-            <Menu.Item as='a'>3</Menu.Item>
-            <Menu.Item as='a'>4</Menu.Item>
-            <Menu.Item as='a' icon>
-              <Icon name='chevron right' />
-            </Menu.Item>
-          </Menu>
-        </Table.HeaderCell>
-      </Table.Row>
-    </Table.Footer>
       </Table>
+
+      <Paginator commentAmount = {commentAmount} loadPage = {loadPage} activePage = {currentPage} ></Paginator>
       <Button color="green" icon onClick={goToCreate}>
         <Icon name="add" />
       </Button>

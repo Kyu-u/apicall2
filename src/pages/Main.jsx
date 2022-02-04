@@ -12,7 +12,6 @@ const Main = () => {
     <div>
       <p>this is main</p>
       <button onClick={() => goToPage('users')}>Users</button>
-      <button onClick={() => goToPage('posts')}>Posts</button>
       <button onClick = { () => goToPage('comments')}>Comments</button>
 
     </div>
