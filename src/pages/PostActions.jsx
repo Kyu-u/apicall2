@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { postData, editData } from "../services";
+import { postUrl } from "../constants";
 export default function PostActions() {
   const params = useParams();
   const { id, postId } = params;
+  const [block, setBlock] = useState(false);
+
   // console.log(postId);
   const location = useLocation();
-  const url = "https://jsonplaceholder.typicode.com/posts";
+  // const postUrl = "https://jsonplaceholder.typicode.com/posts";
   // console.log('location', location);
   const [post, setPost] = useState({});
   // console.log(post2);
@@ -21,10 +24,15 @@ export default function PostActions() {
 
   const handleEdit = async () => {
     try {
-      const response = await editData(`${url}/${postId}`, post);
+      setBlock(true);
+
+      const response = await editData(`${postUrl}/${postId}`, post);
       console.log(response);
     } catch (error) {
       console.error(error);
+    } finally {
+      setBlock(false);
+
     }
   };
 
@@ -32,12 +40,19 @@ export default function PostActions() {
 
     // console.log(post);
     try {
-      const response = await postData(`${url}?userId=${id}`, {post});
+      setBlock(true);
+
+      const response = await postData(`${postUrl}?userId=${id}`, {post});
       console.log(response);
     } catch (error) {
       console.error(error);
+    } finally {
+      setBlock(false);
+
     }
   };
+
+  if(block) return(<div>Please wait</div>)
 
   if (postId) {
     const { title, body } = location.state;

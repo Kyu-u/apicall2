@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { commentData, editData } from "../services";
+import { commentUrl } from "../constants";
 export default function CommentActions() {
   const params = useParams();
   const location = useLocation();
-  const url = "https://jsonplaceholder.typicode.com/comments";
+  const [block, setBlock] = useState(false);
+
+  // const commentUrl = "https://jsonplaceholder.typicode.com/comments";
   // console.log('location', location);
   const [comment, setComment] = useState({});
   const { name, body } = location.state;
@@ -20,10 +23,15 @@ export default function CommentActions() {
 
   const handleEdit = async () => {
     try {
-      const response = await editData(`${url}/${params.id}`, comment);
+      setBlock(true);
+
+      const response = await editData(`${commentUrl}/${params.id}`, comment);
       console.log(response);
     } catch (error) {
       console.error(error);
+    } finally {
+      setBlock(false);
+
     }
   };
 

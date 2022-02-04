@@ -4,6 +4,7 @@ import UserModal from "../components/Modal";
 import { deleteData } from "../services/index";
 import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
 import { Icon, Table, Button } from "semantic-ui-react";
+import { postUrl } from "../constants";
 export default function Posts() {
   const location = useLocation();
   const { name } = location.state;
@@ -16,12 +17,12 @@ export default function Posts() {
   const [block, setBlock] = useState(false);
   const [postList, setPostList] = useState([]);
   const [content, setContent] = useState({});
-  const url = `https://jsonplaceholder.typicode.com/posts?userId=${id}`;
+  // const postUrl = `https://jsonplaceholder.typicode.com/posts?userId=${id}`;
 
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await getData(url);
+      const temp = await getData(`${postUrl}?userId=${id}`);
       setPostList(temp.data);
       setBlock(false);
     } catch (error) {
@@ -31,18 +32,32 @@ export default function Posts() {
   useEffect(() => {
     fetchData();
   }, []);
-  function goToCreate() {
-    navigate("create", { state: location.state });
-  }
+  // function goToCreate() {
+  //   navigate("create", { state: location.state });
+  // }
 
-  function goToEdit(post) {
-    navigate(`${post.id}`, { state: post });
+  // function goToEdit(post) {
+  //   navigate(`${post.id}`, { state: post });
+  // }
+  function navigateToPage(path, post) {
+    if (post) navigate(path, { state: post });
+    else navigate(path);
   }
   const handleDelete = async (id) => {
-    const response = await deleteData(
-      `https://jsonplaceholder.typicode.com/posts/${id}`
-    );
-    console.log(response);
+    try {
+      setBlock(true);
+
+      const response = await deleteData(
+        `https://jsonplaceholder.typicode.com/posts/${id}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setBlock(false);
+
+    }
+
   };
   function toggleOpen() {
     setOpen(!open);
@@ -63,7 +78,7 @@ export default function Posts() {
             size="mini"
             icon
             color="yellow"
-            onClick={() => goToEdit(post)}
+            onClick={() => navigateToPage(`${post.id}`, post)}
           >
             <Icon name="edit"></Icon>
           </Button>
@@ -122,7 +137,7 @@ export default function Posts() {
         </Table.Header>
         <Table.Body>{tableRows}</Table.Body>
       </Table>
-      <Button color="green" icon onClick={goToCreate}>
+      <Button color="green" icon onClick={() => navigateToPage("create")}>
         <Icon name="add" />
       </Button>
     </div>

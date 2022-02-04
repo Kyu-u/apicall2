@@ -4,6 +4,7 @@ import UserModal from "../components/Modal";
 
 import { useNavigate, Link } from "react-router-dom";
 import { Icon, Table, Button } from "semantic-ui-react";
+import { userUrl } from "../constants";
 const Users = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -11,7 +12,6 @@ const Users = () => {
   const [userList, setUserList] = useState([]);
   const [content, setContent] = useState({});
 
-  const url = "https://jsonplaceholder.typicode.com/users";
   // function handleYes() {
   //   setOpen(!open);
   // }
@@ -22,7 +22,7 @@ const Users = () => {
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await getData(url);
+      const temp = await getData(userUrl);
       setUserList(temp.data);
       setBlock(false);
     } catch (error) {
@@ -32,18 +32,30 @@ const Users = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  function goToCreate() {
-    navigate("create");
-  }
-  function goToPosts(user) {
-    navigate(`${user.id}/posts`, { state: user });
-  }
-  function goToEdit(user) {
-    navigate(`${user.id}`, { state: user });
+  // function goToCreate() {
+  //   navigate("create");
+  // }
+  // function goToPosts(user) {
+  //   navigate(`${user.id}/posts`, { state: user });
+  // }
+  // function goToEdit(user) {
+  //   navigate(`${user.id}`, { state: user });
+  // }
+  function navigateToPage(path, user) {
+    if (user) navigate(path, { state: user });
+    else navigate(path);
   }
   const handleDelete = async (id) => {
-    const response = await deleteData(`${url}/${id}`);
-    console.log(response);
+    try {
+      setBlock(true);
+
+      const response = await deleteData(`${userUrl}/${id}`);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setBlock(false);
+    }
   };
   function toggleOpen() {
     setOpen(!open);
@@ -81,7 +93,7 @@ const Users = () => {
             size="mini"
             icon
             color="yellow"
-            onClick={() => goToEdit(user)}
+            onClick={() => navigateToPage(`${user.id}`, user)}
           >
             <Icon name="edit" />
           </Button>
@@ -91,7 +103,7 @@ const Users = () => {
             size="mini"
             color="grey"
             onClick={() => {
-              goToPosts(user);
+              navigateToPage(`${user.id}/posts`, user);
             }}
           >
             <Icon name="info" />
@@ -149,7 +161,7 @@ const Users = () => {
         </Table.Header>
         <Table.Body>{tableRows}</Table.Body>
       </Table>
-      <Button color="green" icon onClick={goToCreate}>
+      <Button color="green" icon onClick={() => navigateToPage("create")}>
         <Icon name="add" />
       </Button>
     </div>

@@ -4,6 +4,7 @@ import UserModal from "../components/Modal";
 import { deleteData } from "../services/index";
 import { useNavigate, Link } from "react-router-dom";
 import Paginator from "../components/Pagination";
+import { commentUrl } from "../constants";
 import { Icon, Table, Button, Menu } from "semantic-ui-react";
 export default function Comments() {
   const navigate = useNavigate();
@@ -15,13 +16,13 @@ export default function Comments() {
   const [currentPage, setCurrentPage] = useState(1);
   const [content, setContent] = useState({});
 
-  const url = `https://jsonplaceholder.typicode.com/comments`;
+  // const commentUrl = `https://jsonplaceholder.typicode.com/comments`;
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await getData(url);
+      const temp = await getData(commentUrl);
       setCommentAmount(temp.data.length);
-      const temp2 = await getData(`${url}?_page=${currentPage}`);
+      const temp2 = await getData(`${commentUrl}?_page=${currentPage}`);
       setCommentList(temp2.data);
       setBlock(false);
     } catch (error) {
@@ -31,7 +32,7 @@ export default function Comments() {
   async function loadPage(page) {
     try {
       setBlock(true);
-      const temp = await getData(`${url}?_page=${page}`);
+      const temp = await getData(`${commentUrl}?_page=${page}`);
       setCommentList(temp.data);
       setBlock(false);
       setCurrentPage(page);
@@ -52,7 +53,7 @@ export default function Comments() {
     navigate(`${comment.id}`, { state: comment });
   }
   const handleDelete = async (id) => {
-    const response = await deleteData(`${url}/${id}`);
+    const response = await deleteData(`${commentUrl}/${id}`);
     console.log(response);
   };
   function toggleOpen() {
