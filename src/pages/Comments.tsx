@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactElement } from "react";
 import { makeRequest } from "../services/index";
 import UserModal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
@@ -56,7 +56,7 @@ export default function Comments() {
   function goToCreate() {
     navigate("create");
   }
-  function generateContent() {
+  function generateContent(): ReactElement {
     return (
       <div>
         <p>{content.id}</p>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactElement } from "react";
 import UserModal from "../components/Modal";
 import { makeRequest } from "../services";
 import { useNavigate,  useParams, useLocation } from "react-router-dom";
@@ -66,7 +66,7 @@ export default function Posts() {
   function toggleOpen() {
     setOpen(!open);
   }
-  function generateContent() {
+  function generateContent():ReactElement {
     return (
       <div>
         <p>{content.id}</p>
