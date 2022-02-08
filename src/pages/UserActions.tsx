@@ -6,7 +6,6 @@ import { userUrl } from "../constants";
 import { IUserData, IUserState } from "../interfaces";
 import { Method } from "axios";
 export default function UserActions() {
-  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as IUserState;
   // console.log(state);
@@ -17,7 +16,7 @@ export default function UserActions() {
     name: "",
     email: "",
   });
-  const [block, setBlock] = useState(false);
+  const [block, setBlock] = useState<boolean>(false);
 
   // console.log(user2);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

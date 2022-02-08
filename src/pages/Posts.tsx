@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import UserModal from "../components/Modal";
 import { makeRequest } from "../services";
-import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
-import { Icon, Table, Button, Menu, Segment, Sidebar } from "semantic-ui-react";
+import { useNavigate,  useParams, useLocation } from "react-router-dom";
+import { Icon, Table, Button } from "semantic-ui-react";
 import { postUrl } from "../constants";
 import { IPostContent, IPostData, IUserData } from "../interfaces";
 export default function Posts() {
@@ -14,9 +14,9 @@ export default function Posts() {
   const { id } = params;
   // console.log(location);
   // console.log(id);
-  const [open, setOpen] = useState(false);
-  const [block, setBlock] = useState(false);
-  const [postList, setPostList] = useState([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const [block, setBlock] = useState<boolean>(false);
+  const [postList, setPostList] = useState<IPostData[]>([]);
   const [content, setContent] = useState<IPostContent>({
     id: 0,
     title: "",

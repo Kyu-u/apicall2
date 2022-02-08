@@ -2,24 +2,20 @@ import React, { useState, useEffect, ReactElement } from "react";
 import { makeRequest } from "../services/index";
 import UserModal from "../components/Modal";
 import { IUserContent, IUserData, IUserResponse } from "../interfaces";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Icon,
   Table,
   Button,
-  Menu,
-  Segment,
-  Sidebar,
-  Dimmer,
-  Header,
+
 } from "semantic-ui-react";
 import { userUrl } from "../constants";
 import { AxiosResponse } from "axios";
 const Users = () => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [block, setBlock] = useState(false);
-  const [userList, setUserList] = useState([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const [block, setBlock] = useState<boolean>(false);
+  const [userList, setUserList] = useState<IUserData[]>([]);
   const [content, setContent] = useState<IUserContent>({
     name: "",
     id: 0

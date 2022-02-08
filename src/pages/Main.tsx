@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 const Main = () => {
   const navigate = useNavigate();
@@ -6,7 +6,6 @@ const Main = () => {
     navigate(resource)
   }
 
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>

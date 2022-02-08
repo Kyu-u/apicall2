@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { makeRequest } from "../services";
@@ -8,7 +8,7 @@ import { Method } from "axios";
 export default function PostActions() {
   const params = useParams();
   const { id, postId } = params;
-  const [block, setBlock] = useState(false);
+  const [block, setBlock] = useState<boolean>(false);
 
   // console.log(postId);
   const location = useLocation();

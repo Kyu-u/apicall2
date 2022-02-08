@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useState } from "react";
+import React, {  MouseEvent } from "react";
 import { Pagination, PaginationProps } from "semantic-ui-react";
 import { IPaginatorProps } from "../interfaces";
 export default function Paginator(props: IPaginatorProps) {

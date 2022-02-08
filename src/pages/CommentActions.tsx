@@ -8,7 +8,7 @@ import { Method } from "axios";
 export default function CommentActions() {
   const params = useParams();
   const location = useLocation();
-  const [block, setBlock] = useState(false);
+  const [block, setBlock] = useState<boolean>(false);
 
   // const commentUrl = "https://jsonplaceholder.typicode.com/comments";
   // console.log('location', location);

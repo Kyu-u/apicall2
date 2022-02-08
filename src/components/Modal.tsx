@@ -1,13 +1,9 @@
-import React, {useState} from "react";
+import React  from "react";
 import {
-  Icon,
-  Label,
-  Menu,
-  Table,
+
   Button,
   Modal,
   Header,
-  Image,
 } from "semantic-ui-react";
 import { IModalProps } from "../interfaces";
 export default function UserModal(props: IModalProps) {

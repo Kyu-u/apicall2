@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Segment, Sidebar, Icon, SidebarProps } from "semantic-ui-react";
+import { Menu, Sidebar, Icon } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 export default function SidebarComponent() {
   const navigate = useNavigate();

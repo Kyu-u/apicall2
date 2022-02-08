@@ -4,16 +4,16 @@ import UserModal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 import Paginator from "../components/Pagination";
 import { commentUrl } from "../constants";
-import { Icon, Table, Button, Menu, Segment, Sidebar } from "semantic-ui-react";
+import { Icon, Table, Button,  } from "semantic-ui-react";
 import { ICommentData } from "../interfaces";
 export default function Comments() {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
-  const [block, setBlock] = useState(false);
-  const [commentList, setCommentList] = useState([]);
-  const [commentAmount, setCommentAmount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [block, setBlock] = useState<boolean>(false);
+  const [commentList, setCommentList] = useState<ICommentData[]>([]);
+  const [commentAmount, setCommentAmount] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [content, setContent] = useState<ICommentData>({
     id: 0,
     postId: 0,
