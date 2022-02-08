@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 const Main = () => {
   const navigate = useNavigate();
-  const goToPage = (resource) => {
+  const goToPage = (resource: string) => {
     navigate(resource)
   }
 

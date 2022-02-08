@@ -9,7 +9,8 @@ import {
   Header,
   Image,
 } from "semantic-ui-react";
-export default function UserModal(props) {
+import { IModalProps } from "../interfaces";
+export default function UserModal(props: IModalProps) {
   const { isOpen, handleDelete,content, title, toggleOpen } = props;
   // console.log(`content`,content);
   const url = "https://jsonplaceholder.typicode.com/";
@@ -33,7 +34,7 @@ export default function UserModal(props) {
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
-          <Button color="black" onClick={() => toggleOpen()}>
+          <Button color="black" onClick={toggleOpen}>
             Nope
           </Button>
           <Button

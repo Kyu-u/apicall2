@@ -24,7 +24,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="users" replace />} />
+          <Route path="/" element={<Navigate to="/users" replace />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<UserActions />} />
           <Route path="/users/:id/posts" element={<Posts />} />
@@ -32,8 +32,7 @@ function App() {
           <Route path="/users/:id/posts/create" element={<PostActions />} />
           <Route path="/users/create" element={<UserActions />} />
           <Route path="/posts" element={<Posts />} />
-          {/* <Route path="posts/:id" element={<PostActions  />} /> */}
-          {/* <Route path="posts/create" element={<UserActions />} /> */}
+
           <Route path="/comments" element={<Comments />} />
           <Route path="/comments/:id" element={<CommentActions />} />
         </Routes>

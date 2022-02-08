@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { postData, editData, makeRequest } from "../services";
 import { postUrl } from "../constants";
+import { IPostContent, IPostData } from "../interfaces";
+import { Method } from "axios";
 export default function PostActions() {
   const params = useParams();
   const { id, postId } = params;
@@ -12,9 +14,13 @@ export default function PostActions() {
   const location = useLocation();
   // const postUrl = "https://jsonplaceholder.typicode.com/posts";
   // console.log('location', location);
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState<IPostData>({
+    title: "",
+    body: "",
+    id:0,
+  });
   // console.log(post2);
-  const handleChange = (e) => {
+  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
     const temp = {
       ...post,
       [e.target.name]: e.target.value,
@@ -52,7 +58,7 @@ export default function PostActions() {
   //   }
   // };
 
-  const handleRequest = async (url,method,data) => {
+  const handleRequest = async (url: string,method: Method,data: IPostData) => {
     try {
       setBlock(true);
       const response = await makeRequest(url, method, data);
@@ -67,7 +73,7 @@ export default function PostActions() {
   if(block) return(<div>Please wait</div>)
 
   if (postId) {
-    const { title, body } = location.state;
+    const { title, body } = location.state as IPostContent;
 
     return (
       <div className="container">

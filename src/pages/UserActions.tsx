@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { postData, editData, makeRequest } from "../services";
 import { userUrl } from "../constants";
+import { IUserData, IUserState } from "../interfaces";
+import { Method } from "axios";
 export default function UserActions() {
   const navigate = useNavigate();
-  const params = useParams();
   const location = useLocation();
+  const state = location.state as IUserState;
+  // console.log(state);
+  const params = useParams();
   // const userUrl = "https://jsonplaceholder.typicode.com/users";
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<IUserData>({
+    id: 0,
+    name: "",
+    email: "",
+  });
   const [block, setBlock] = useState(false);
 
   // console.log(user2);
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const temp = {
       ...user,
       [e.target.name]: e.target.value,
@@ -45,7 +53,11 @@ export default function UserActions() {
   //   }
   // };
 
-  const handleRequest = async (url,method,data) => {
+  const handleRequest = async (
+    url: string,
+    method: Method,
+    data: IUserData
+  ) => {
     try {
       setBlock(true);
       const response = await makeRequest(url, method, data);
@@ -55,31 +67,31 @@ export default function UserActions() {
     } finally {
       setBlock(false);
     }
-  }
+  };
 
   if (block) {
     return <div>Please wait</div>;
   }
 
   if (params.id) {
-    const { name, username, email, phone } = location.state;
+    // const  = location.state;
 
     return (
       <div className="container">
         <h1>Edit User</h1>
-        <h2>{name}</h2>
+        <h2>{state.name}</h2>
         <Form>
           <FormField>
             <label htmlFor="name">Name</label>
             <input
               type="text"
               onChange={handleChange}
-              defaultValue={name}
+              defaultValue={state.name}
               name="name"
               id=""
             />
           </FormField>
-          <FormField>
+          {/* <FormField>
             <label htmlFor="name">Username</label>
             <input
               type="text"
@@ -88,28 +100,24 @@ export default function UserActions() {
               name="username"
               id=""
             />
-          </FormField>
+          </FormField> */}
           <FormField>
             <label htmlFor="name">Email</label>
             <input
               type="text"
               onChange={handleChange}
-              defaultValue={email}
+              defaultValue={state.email}
               name="email"
               id=""
             />
           </FormField>
-          <FormField>
-            <label htmlFor="name">Phone</label>
-            <input
-              type="text"
-              onChange={handleChange}
-              defaultValue={phone}
-              name="phone"
-              id=""
-            />
-          </FormField>
-          <Button type="button" onClick={() => handleRequest(`${userUrl}/${params.id}`,'put',user)}>
+
+          <Button
+            type="button"
+            onClick={() =>
+              handleRequest(`${userUrl}/${params.id}`, "put", user)
+            }
+          >
             Update
           </Button>
         </Form>
@@ -136,7 +144,10 @@ export default function UserActions() {
           <label htmlFor="name">Phone</label>
           <input type="text" onChange={handleChange} name="phone" id="" />
         </FormField>
-        <Button type="button" onClick={() => handleRequest(userUrl,'post',user)}>
+        <Button
+          type="button"
+          onClick={() => handleRequest(userUrl, "post", user)}
+        >
           Submit
         </Button>
       </Form>

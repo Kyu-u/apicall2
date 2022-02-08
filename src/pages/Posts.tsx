@@ -5,9 +5,11 @@ import { deleteData } from "../services/index";
 import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
 import { Icon, Table, Button, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { postUrl } from "../constants";
+import { IPostContent, IPostData, IUserData } from "../interfaces";
 export default function Posts() {
   const location = useLocation();
-  const { name } = location.state;
+  const {name} = location.state as IUserData
+  // const { name } = location.state;
   const navigate = useNavigate();
   const params = useParams();
   const { id } = params;
@@ -16,7 +18,11 @@ export default function Posts() {
   const [open, setOpen] = useState(false);
   const [block, setBlock] = useState(false);
   const [postList, setPostList] = useState([]);
-  const [content, setContent] = useState({});
+  const [content, setContent] = useState<IPostContent>({
+    id: 0,
+    title: "",
+    body: "",
+  });
   // const postUrl = `https://jsonplaceholder.typicode.com/posts?userId=${id}`;
 
   async function fetchData() {
@@ -39,11 +45,11 @@ export default function Posts() {
   // function goToEdit(post) {
   //   navigate(`${post.id}`, { state: post });
   // }
-  function navigateToPage(path, post) {
+  function navigateToPage(path:string, post?: IPostData) {
     if (post) navigate(path, { state: post });
     else navigate(path);
   }
-  const handleDelete = async (id) => {
+  const handleDelete = async (id:number) => {
     try {
       setBlock(true);
 
@@ -60,11 +66,20 @@ export default function Posts() {
   function toggleOpen() {
     setOpen(!open);
   }
+  function generateContent() {
+    return (
+      <div>
+        <p>{content.id}</p>
+        <p>{content.title}</p>
+        <p>{content.body}</p>
+      </div>
+    );
+  }
   // function handleModalButton(content) {
   //   setContent(content);
   //   toggleOpen();
   // }
-  const tableRows = postList.map((post, i) => {
+  const tableRows = postList.map((post: IPostData, i: number) => {
     // const {  } = post;
     return (
       <Table.Row className="" key={`post${i}`}>
@@ -84,15 +99,15 @@ export default function Posts() {
             icon
             size="mini"
             onClick={() => {
-              const temp = (
-                <div>
-                  <p>{post.id}</p>
-                  <p>{post.title}</p>
-                  <p>{post.body}</p>
-                </div>
-              );
+              // const temp = (
+              //   <div>
+              //     <p>{post.id}</p>
+              //     <p>{post.title}</p>
+              //     <p>{post.body}</p>
+              //   </div>
+              // );
 
-              setContent({ ...temp, id: post.id });
+              setContent({ ...content, id: post.id, title: post.title, body: post.body });
               // handleModalButton(temp);
               toggleOpen();
             }}
@@ -117,11 +132,14 @@ export default function Posts() {
         visible
         width="thin"
       >
-        <Menu.Item onClick={() => navigate('/users', {replace: true})} as="a">
+        <Menu.Item onClick={() => navigate("/users", { replace: true })} as="a">
           <Icon name="user" />
           Users
         </Menu.Item>
-        <Menu.Item onClick={() => navigate('/comments', {replace: true})} as="a">
+        <Menu.Item
+          onClick={() => navigate("/comments", { replace: true })}
+          as="a"
+        >
           <Icon name="comment" />
           Comments
         </Menu.Item>
@@ -133,11 +151,11 @@ export default function Posts() {
           <div className="container">
             <UserModal
               title={"Delete Post"}
-              content={content}
+              content={generateContent()}
               isOpen={open}
               toggleOpen={toggleOpen}
               handleDelete={() => handleDelete(content.id)}
-              resource="post"
+              // resource="post"
             />
             <h1>{name} - Posts</h1>
             <Table celled>

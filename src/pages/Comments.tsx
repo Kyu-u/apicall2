@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { getData } from "../services/index";
 import UserModal from "../components/Modal";
 import { deleteData } from "../services/index";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Paginator from "../components/Pagination";
 import { commentUrl } from "../constants";
 import { Icon, Table, Button, Menu, Segment, Sidebar } from "semantic-ui-react";
+import { ICommentData } from "../interfaces";
 export default function Comments() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -14,7 +15,12 @@ export default function Comments() {
   const [commentList, setCommentList] = useState([]);
   const [commentAmount, setCommentAmount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [content, setContent] = useState({});
+  const [content, setContent] = useState<ICommentData>({
+    id: 0,
+    postId: 0,
+    name: "",
+    body: ""
+  });
 
   // const commentUrl = `https://jsonplaceholder.typicode.com/comments`;
   async function fetchData() {
@@ -29,7 +35,7 @@ export default function Comments() {
       console.error(error);
     }
   }
-  async function loadPage(page) {
+  async function loadPage(page:number) {
     try {
       setBlock(true);
       const temp = await getData(`${commentUrl}?_page=${page}`);
@@ -48,18 +54,27 @@ export default function Comments() {
   function goToCreate() {
     navigate("create");
   }
+  function generateContent() {
+    return (
+      <div>
+        <p>{content.id}</p>
+        <p>{content.name}</p>
+        <p>{content.body}</p>
+      </div>
+    );
+  }
 
-  function goToEdit(comment) {
+  function goToEdit(comment:ICommentData) {
     navigate(`${comment.id}`, { state: comment });
   }
-  const handleDelete = async (id) => {
+  const handleDelete = async (id:number) => {
     const response = await deleteData(`${commentUrl}/${id}`);
     console.log(response);
   };
   function toggleOpen() {
     setOpen(!open);
   }
-  const tableRows = commentList.map((comment, i) => {
+  const tableRows = commentList.map((comment:ICommentData, i:number) => {
     // const {  } = comment;
     return (
       <Table.Row className="" key={`comment${i}`}>
@@ -97,15 +112,15 @@ export default function Comments() {
             icon
             size="mini"
             onClick={() => {
-              const temp = (
-                <div>
-                  <p>{comment.id}</p>
-                  <p>{comment.name}</p>
-                  <p>{comment.body}</p>
-                </div>
-              );
+              // const temp = (
+              //   <div>
+              //     <p>{comment.id}</p>
+              //     <p>{comment.name}</p>
+              //     <p>{comment.body}</p>
+              //   </div>
+              // );
 
-              setContent({ ...temp, id: comment.id });
+              setContent({ ...content, id: comment.id, name: comment.name, body: comment.body });
               // handleModalButton(temp);
               toggleOpen();
             }}
@@ -147,11 +162,11 @@ export default function Comments() {
           <div className="container">
             <UserModal
               title={"Delete Comment"}
-              content={content}
+              content={generateContent()}
               isOpen={open}
               toggleOpen={toggleOpen}
               handleDelete={() => handleDelete(content.id)}
-              resource="post"
+              // resource="post"
             />
             <h1>Comments</h1>
             <Table celled>
