@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { getData } from "../services/index";
 import UserModal from "../components/Modal";
-import { deleteData } from "../services/index";
+import { makeRequest } from "../services";
 import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
 import { Icon, Table, Button, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { postUrl } from "../constants";
 import { IPostContent, IPostData, IUserData } from "../interfaces";
 export default function Posts() {
   const location = useLocation();
-  const {name} = location.state as IUserData
+  const { name } = location.state as IUserData;
   // const { name } = location.state;
   const navigate = useNavigate();
   const params = useParams();
@@ -28,7 +27,7 @@ export default function Posts() {
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await getData(`${postUrl}?userId=${id}`);
+      const temp = await makeRequest(`${postUrl}?userId=${id}`, "get");
       setPostList(temp.data);
       setBlock(false);
     } catch (error) {
@@ -45,16 +44,17 @@ export default function Posts() {
   // function goToEdit(post) {
   //   navigate(`${post.id}`, { state: post });
   // }
-  function navigateToPage(path:string, post?: IPostData) {
+  function navigateToPage(path: string, post?: IPostData) {
     if (post) navigate(path, { state: post });
     else navigate(path);
   }
-  const handleDelete = async (id:number) => {
+  const handleDelete = async (id: number) => {
     try {
       setBlock(true);
 
-      const response = await deleteData(
-        `https://jsonplaceholder.typicode.com/posts/${id}`
+      const response = await makeRequest(
+        `https://jsonplaceholder.typicode.com/posts/${id}`,
+        "DELETE"
       );
       console.log(response);
     } catch (error) {
@@ -107,7 +107,12 @@ export default function Posts() {
               //   </div>
               // );
 
-              setContent({ ...content, id: post.id, title: post.title, body: post.body });
+              setContent({
+                ...content,
+                id: post.id,
+                title: post.title,
+                body: post.body,
+              });
               // handleModalButton(temp);
               toggleOpen();
             }}
@@ -122,70 +127,37 @@ export default function Posts() {
     return <div>Please wait</div>;
   }
   return (
-    <Sidebar.Pushable as={Segment}>
-      <Sidebar
-        as={Menu}
-        animation="overlay"
-        icon="labeled"
-        inverted
-        vertical
-        visible
-        width="thin"
-      >
-        <Menu.Item onClick={() => navigate("/users", { replace: true })} as="a">
-          <Icon name="user" />
-          Users
-        </Menu.Item>
-        <Menu.Item
-          onClick={() => navigate("/comments", { replace: true })}
-          as="a"
-        >
-          <Icon name="comment" />
-          Comments
-        </Menu.Item>
-      </Sidebar>
+    <div className="container">
+      <UserModal
+        title={"Delete Post"}
+        content={generateContent()}
+        isOpen={open}
+        toggleOpen={toggleOpen}
+        handleDelete={() => handleDelete(content.id)}
+        // resource="post"
+      />
+      <h1>{name} - Posts</h1>
+      <Table celled>
+        <Table.Header>
+          <Table.Row className="tableheader">
+            <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell className="tableheader">Title</Table.HeaderCell>
+            <Table.HeaderCell className="tableheader">Body</Table.HeaderCell>
 
-      <Sidebar.Pusher>
-        <Segment basic>
-          {" "}
-          <div className="container">
-            <UserModal
-              title={"Delete Post"}
-              content={generateContent()}
-              isOpen={open}
-              toggleOpen={toggleOpen}
-              handleDelete={() => handleDelete(content.id)}
-              // resource="post"
-            />
-            <h1>{name} - Posts</h1>
-            <Table celled>
-              <Table.Header>
-                <Table.Row className="tableheader">
-                  <Table.HeaderCell>ID</Table.HeaderCell>
-                  <Table.HeaderCell className="tableheader">
-                    Title
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="tableheader">
-                    Body
-                  </Table.HeaderCell>
-
-                  <Table.HeaderCell
-                    textAlign="center"
-                    width={"two"}
-                    className="tableheader"
-                  >
-                    Action
-                  </Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>{tableRows}</Table.Body>
-            </Table>
-            <Button color="green" icon onClick={() => navigateToPage("create")}>
-              <Icon name="add" />
-            </Button>
-          </div>
-        </Segment>
-      </Sidebar.Pusher>
-    </Sidebar.Pushable>
+            <Table.HeaderCell
+              textAlign="center"
+              width={"two"}
+              className="tableheader"
+            >
+              Action
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>{tableRows}</Table.Body>
+      </Table>
+      <Button color="green" icon onClick={() => navigateToPage("create")}>
+        <Icon name="add" />
+      </Button>
+    </div>
   );
 }

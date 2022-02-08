@@ -45,6 +45,16 @@ export interface IModalProps {
 
 export interface IPaginatorProps {
   commentAmount: number;
-  loadPage(page:number): void;
+  loadPage(page: number): void;
   activePage: number;
+}
+
+export interface IUserResponse {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface ISidebarProps {
+  
 }

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
-import { postData, editData, makeRequest } from "../services";
+import { makeRequest } from "../services";
 import { userUrl } from "../constants";
 import { IUserData, IUserState } from "../interfaces";
 import { Method } from "axios";
@@ -132,18 +132,12 @@ export default function UserActions() {
           <label htmlFor="name">Name</label>
           <input type="text" onChange={handleChange} name="name" id="" />
         </FormField>
-        <FormField>
-          <label htmlFor="name">Username</label>
-          <input type="text" onChange={handleChange} name="username" id="" />
-        </FormField>
+
         <FormField>
           <label htmlFor="name">Email</label>
           <input type="text" onChange={handleChange} name="email" id="" />
         </FormField>
-        <FormField>
-          <label htmlFor="name">Phone</label>
-          <input type="text" onChange={handleChange} name="phone" id="" />
-        </FormField>
+
         <Button
           type="button"
           onClick={() => handleRequest(userUrl, "post", user)}

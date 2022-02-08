@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getData } from "../services/index";
+import { makeRequest } from "../services/index";
 import UserModal from "../components/Modal";
-import { deleteData } from "../services/index";
 import { useNavigate } from "react-router-dom";
 import Paginator from "../components/Pagination";
 import { commentUrl } from "../constants";
@@ -19,26 +18,29 @@ export default function Comments() {
     id: 0,
     postId: 0,
     name: "",
-    body: ""
+    body: "",
   });
 
   // const commentUrl = `https://jsonplaceholder.typicode.com/comments`;
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await getData(commentUrl);
+      const temp = await makeRequest(commentUrl, "GET");
       setCommentAmount(temp.data.length);
-      const temp2 = await getData(`${commentUrl}?_page=${currentPage}`);
+      const temp2 = await makeRequest(
+        `${commentUrl}?_page=${currentPage}`,
+        "GET"
+      );
       setCommentList(temp2.data);
       setBlock(false);
     } catch (error) {
       console.error(error);
     }
   }
-  async function loadPage(page:number) {
+  async function loadPage(page: number) {
     try {
       setBlock(true);
-      const temp = await getData(`${commentUrl}?_page=${page}`);
+      const temp = await makeRequest(`${commentUrl}?_page=${page}`, "GET");
       setCommentList(temp.data);
       setBlock(false);
       setCurrentPage(page);
@@ -64,17 +66,17 @@ export default function Comments() {
     );
   }
 
-  function goToEdit(comment:ICommentData) {
+  function goToEdit(comment: ICommentData) {
     navigate(`${comment.id}`, { state: comment });
   }
-  const handleDelete = async (id:number) => {
-    const response = await deleteData(`${commentUrl}/${id}`);
+  const handleDelete = async (id: number) => {
+    const response = await makeRequest(`${commentUrl}/${id}`, "GET");
     console.log(response);
   };
   function toggleOpen() {
     setOpen(!open);
   }
-  const tableRows = commentList.map((comment:ICommentData, i:number) => {
+  const tableRows = commentList.map((comment: ICommentData, i: number) => {
     // const {  } = comment;
     return (
       <Table.Row className="" key={`comment${i}`}>
@@ -120,7 +122,12 @@ export default function Comments() {
               //   </div>
               // );
 
-              setContent({ ...content, id: comment.id, name: comment.name, body: comment.body });
+              setContent({
+                ...content,
+                id: comment.id,
+                name: comment.name,
+                body: comment.body,
+              });
               // handleModalButton(temp);
               toggleOpen();
             }}
@@ -136,75 +143,45 @@ export default function Comments() {
     return <div>Please wait</div>;
   }
   return (
-    <Sidebar.Pushable as={Segment}>
-      <Sidebar
-        as={Menu}
-        animation="overlay"
-        icon="labeled"
-        inverted
-        vertical
-        visible
-        width="thin"
-      >
-        <Menu.Item onClick={() => navigate('/users', {replace: true})} as="a">
-          <Icon name="user" />
-          Users
-        </Menu.Item>
-        <Menu.Item as="a">
-          <Icon name="comment" />
-          Comments
-        </Menu.Item>
-      </Sidebar>
+    <div className="container">
+      <UserModal
+        title={"Delete Comment"}
+        content={generateContent()}
+        isOpen={open}
+        toggleOpen={toggleOpen}
+        handleDelete={() => handleDelete(content.id)}
+        // resource="post"
+      />
+      <h1>Comments</h1>
+      <Table celled>
+        <Table.Header>
+          <Table.Row className="tableheader">
+            <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>Post ID</Table.HeaderCell>
 
-      <Sidebar.Pusher>
-        <Segment basic>
-          {" "}
-          <div className="container">
-            <UserModal
-              title={"Delete Comment"}
-              content={generateContent()}
-              isOpen={open}
-              toggleOpen={toggleOpen}
-              handleDelete={() => handleDelete(content.id)}
-              // resource="post"
-            />
-            <h1>Comments</h1>
-            <Table celled>
-              <Table.Header>
-                <Table.Row className="tableheader">
-                  <Table.HeaderCell>ID</Table.HeaderCell>
-                  <Table.HeaderCell>Post ID</Table.HeaderCell>
+            <Table.HeaderCell className="tableheader">Name</Table.HeaderCell>
+            <Table.HeaderCell className="tableheader">Body</Table.HeaderCell>
 
-                  <Table.HeaderCell className="tableheader">
-                    Name
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="tableheader">
-                    Body
-                  </Table.HeaderCell>
+            <Table.HeaderCell
+              textAlign="center"
+              width={"two"}
+              className="tableheader"
+            >
+              Action
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>{tableRows}</Table.Body>
+      </Table>
 
-                  <Table.HeaderCell
-                    textAlign="center"
-                    width={"two"}
-                    className="tableheader"
-                  >
-                    Action
-                  </Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>{tableRows}</Table.Body>
-            </Table>
-
-            <Paginator
-              commentAmount={commentAmount}
-              loadPage={loadPage}
-              activePage={currentPage}
-            ></Paginator>
-            <Button color="green" icon onClick={goToCreate}>
-              <Icon name="add" />
-            </Button>
-          </div>
-        </Segment>
-      </Sidebar.Pusher>
-    </Sidebar.Pushable>
+      <Paginator
+        commentAmount={commentAmount}
+        loadPage={loadPage}
+        activePage={currentPage}
+      ></Paginator>
+      <Button color="green" icon onClick={goToCreate}>
+        <Icon name="add" />
+      </Button>
+    </div>
   );
 }

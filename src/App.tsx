@@ -1,28 +1,19 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Main from "./pages/Main";
 import Users from "./pages/Users";
-import {
-  Sidebar,
-  Menu,
-  Header,
-  Image,
-  Icon,
-  Segment,
-  Checkbox,
-} from "semantic-ui-react";
+import SidebarComponent from "./components/SidebarComponent";
 import UserActions from "./pages/UserActions";
 import PostActions from "./pages/PostActions";
 import Posts from "./pages/Posts";
 import Comments from "./pages/Comments";
 import CommentActions from "./pages/CommentActions";
 function App() {
-  const [visible, setVisible] = useState(false);
   return (
     <div className="App">
       <BrowserRouter>
+        <SidebarComponent />
+
         <Routes>
           <Route path="/" element={<Navigate to="/users" replace />} />
           <Route path="/users" element={<Users />} />

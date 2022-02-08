@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
-import { postData, editData, makeRequest } from "../services";
+import { makeRequest } from "../services";
 import { postUrl } from "../constants";
 import { IPostContent, IPostData } from "../interfaces";
 import { Method } from "axios";

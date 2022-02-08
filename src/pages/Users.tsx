@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { getData, deleteData } from "../services/index";
+import React, { useState, useEffect, ReactElement } from "react";
+import { makeRequest } from "../services/index";
 import UserModal from "../components/Modal";
-import { IUserContent, IUserData } from "../interfaces";
+import { IUserContent, IUserData, IUserResponse } from "../interfaces";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Icon,
@@ -14,6 +14,7 @@ import {
   Header,
 } from "semantic-ui-react";
 import { userUrl } from "../constants";
+import { AxiosResponse } from "axios";
 const Users = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ const Users = () => {
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await getData(userUrl);
+      const temp = await makeRequest(userUrl, 'get');
       setUserList(temp.data);
       setBlock(false);
     } catch (error) {
@@ -53,7 +54,7 @@ const Users = () => {
   // function goToEdit(user) {
   //   navigate(`${user.id}`, { state: user });
   // }
-  function navigateToPage(path: string, user?: IUserData):void {
+  function navigateToPage(path: string, user?: IUserData) {
     if (user) navigate(path, { state: user });
     else navigate(path);
   }
@@ -61,7 +62,7 @@ const Users = () => {
     try {
       setBlock(true);
 
-      const response = await deleteData(`${userUrl}/${id}`);
+      const response:AxiosResponse<IUserResponse> = await makeRequest(`${userUrl}/${id}`,'delete');
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -72,7 +73,7 @@ const Users = () => {
   function toggleOpen() {
     setOpen(!open);
   }
-  function generateContent() {
+  function generateContent():ReactElement {
     return (
       <div>
         <p>{content.id}</p>
@@ -85,7 +86,7 @@ const Users = () => {
   //   // setContent({...content, id: id });
   //   toggleOpen();
   // }
-  const tableRows = userList.map((user: IUserData, i: number) => {
+  const tableRows = userList.map((user: IUserData, i: number):ReactElement => {
     // const {  } = user;
     return (
       <Table.Row className="" key={`user${i}`}>
@@ -154,79 +155,45 @@ const Users = () => {
     return <div>Please wait</div>;
   }
   return (
-    <Dimmer.Dimmable as={Segment} dimmed={block}>
-      <Sidebar.Pushable as={Segment}>
-        <Sidebar
-          as={Menu}
-          animation="overlay"
-          icon="labeled"
-          inverted
-          vertical
-          visible
-          width="thin"
-        >
-          <Menu.Item as="a">
-            <Icon name="user" />
-            Users
-          </Menu.Item>
-          <Menu.Item
-            onClick={() => navigate("/comments", { replace: true })}
-            as="a"
+    <div className="container">
+    <UserModal
+      // user={user}
+      title={"Delete User"}
+      content={generateContent()}
+      isOpen={open}
+      toggleOpen={toggleOpen}
+      handleDelete={() => handleDelete(content.id)}
+      // resource="user"
+    />
+    <h1>Users</h1>
+    <Table celled>
+      <Table.Header>
+        <Table.Row className="tableheader">
+          <Table.HeaderCell>User</Table.HeaderCell>
+          <Table.HeaderCell className="tableheader">
+            Email
+          </Table.HeaderCell>
+          <Table.HeaderCell
+            textAlign="center"
+            width={"two"}
+            className="tableheader"
           >
-            <Icon name="comment" />
-            Comments
-          </Menu.Item>
-        </Sidebar>
+            Action
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>{tableRows}</Table.Body>
+    </Table>
+    <Button
+      color="green"
+      icon
+      onClick={() => navigateToPage("/users/create")}
+    >
+      <Icon name="add" />
+    </Button>
+  </div>
+    
 
-        <Sidebar.Pusher>
-          <Segment basic>
-            <div className="container">
-              <UserModal
-                // user={user}
-                title={"Delete User"}
-                content={generateContent()}
-                isOpen={open}
-                toggleOpen={toggleOpen}
-                handleDelete={() => handleDelete(content.id)}
-                // resource="user"
-              />
-              <h1>Users</h1>
-              <Table celled>
-                <Table.Header>
-                  <Table.Row className="tableheader">
-                    <Table.HeaderCell>User</Table.HeaderCell>
-                    <Table.HeaderCell className="tableheader">
-                      Email
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      textAlign="center"
-                      width={"two"}
-                      className="tableheader"
-                    >
-                      Action
-                    </Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>{tableRows}</Table.Body>
-              </Table>
-              <Button
-                color="green"
-                icon
-                onClick={() => navigateToPage("/users/create")}
-              >
-                <Icon name="add" />
-              </Button>
-            </div>
-          </Segment>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
-      <Dimmer active={block}>
-        <Header as="h2" icon inverted>
-          <Icon name="heart" />
-          Dimmed Message!
-        </Header>
-      </Dimmer>
-    </Dimmer.Dimmable>
   );
 };
 
