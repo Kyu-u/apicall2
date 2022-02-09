@@ -61,7 +61,7 @@ export default function PostActions() {
   const handleRequest = async (url: string,method: Method,data: IPostData) => {
     try {
       setBlock(true);
-      const response = await makeRequest(url, method, data);
+      const response = await makeRequest<IPostData>(url, method, data);
       console.log(response);
     } catch (error) {
       console.log(error);

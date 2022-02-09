@@ -42,13 +42,14 @@ export default function CommentActions() {
   //   }
   // };
   const handleRequest = async (
-    url: string,
+    url: string, 
+
     method: Method,
     data: ICommentData
   ) => {
     try {
       setBlock(true);
-      const response = await makeRequest(url, method, data);
+      const response = await makeRequest<ICommentData>(url, method, data);
       console.log(response);
     } catch (error) {
       console.log(error);

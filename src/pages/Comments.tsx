@@ -25,13 +25,13 @@ export default function Comments() {
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await makeRequest(commentUrl, "GET");
-      setCommentAmount(temp.data.length);
-      const temp2 = await makeRequest(
+      const temp = await makeRequest<ICommentData[]>(commentUrl, "GET");
+      setCommentAmount(temp.length);
+      const temp2 = await makeRequest<ICommentData[]>(
         `${commentUrl}?_page=${currentPage}`,
         "GET"
       );
-      setCommentList(temp2.data);
+      setCommentList(temp2);
       setBlock(false);
     } catch (error) {
       console.error(error);
@@ -40,8 +40,8 @@ export default function Comments() {
   async function loadPage(page: number) {
     try {
       setBlock(true);
-      const temp = await makeRequest(`${commentUrl}?_page=${page}`, "GET");
-      setCommentList(temp.data);
+      const temp = await makeRequest<ICommentData[]>(`${commentUrl}?_page=${page}`, "GET");
+      setCommentList(temp);
       setBlock(false);
       setCurrentPage(page);
     } catch (error) {
@@ -70,7 +70,7 @@ export default function Comments() {
     navigate(`${comment.id}`, { state: comment });
   }
   const handleDelete = async (id: number) => {
-    const response = await makeRequest(`${commentUrl}/${id}`, "GET");
+    const response = await makeRequest<ICommentData[]>(`${commentUrl}/${id}`, "GET");
     console.log(response);
   };
   function toggleOpen() {

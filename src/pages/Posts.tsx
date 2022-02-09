@@ -27,8 +27,8 @@ export default function Posts() {
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await makeRequest(`${postUrl}?userId=${id}`, "get");
-      setPostList(temp.data);
+      const temp = await makeRequest<IPostData[]>(`${postUrl}?userId=${id}`, "get");
+      setPostList(temp);
       setBlock(false);
     } catch (error) {
       console.error(error);
@@ -52,7 +52,7 @@ export default function Posts() {
     try {
       setBlock(true);
 
-      const response = await makeRequest(
+      const response = await makeRequest<IPostData>(
         `https://jsonplaceholder.typicode.com/posts/${id}`,
         "DELETE"
       );

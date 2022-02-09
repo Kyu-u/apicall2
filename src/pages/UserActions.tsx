@@ -59,7 +59,7 @@ export default function UserActions() {
   ) => {
     try {
       setBlock(true);
-      const response = await makeRequest(url, method, data);
+      const response = await makeRequest<IUserData>(url, method, data);
       console.log(response);
     } catch (error) {
       console.log(error);

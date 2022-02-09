@@ -31,8 +31,8 @@ const Users = () => {
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await makeRequest(userUrl, 'get');
-      setUserList(temp.data);
+      const temp = await makeRequest<IUserData[]>(userUrl, 'get');
+      setUserList(temp);
       setBlock(false);
     } catch (error) {
       console.error(error);
@@ -58,7 +58,7 @@ const Users = () => {
     try {
       setBlock(true);
 
-      const response:AxiosResponse<IUserResponse> = await makeRequest(`${userUrl}/${id}`,'delete');
+      const response = await makeRequest(`${userUrl}/${id}`,'delete');
       console.log(response);
     } catch (error) {
       console.error(error);
