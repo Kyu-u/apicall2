@@ -20,7 +20,7 @@ export function UserModalReducer(state: IState = initialState, action: UserModal
       return { ...state, content: action.payload, isOpen: true }
 
     case UserModalTypes.CLOSE:
-      return {...state, isOpen: !state.isOpen}
+      return {...state, isOpen: false}
     default:
       return {...state}
   }
