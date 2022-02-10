@@ -3,43 +3,36 @@ import { makeRequest } from "../services/index";
 import UserModal from "../components/Modal";
 import { IUserContent, IUserData, IUserResponse } from "../interfaces";
 import { useNavigate } from "react-router-dom";
-import {
-  Icon,
-  Table,
-  Button,
-
-} from "semantic-ui-react";
+import { Icon, Table, Button } from "semantic-ui-react";
 import { userUrl } from "../constants";
-import { AxiosResponse } from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { closeUserModal, getUsers, openUserModal } from "../redux/actions";
+import { RootType } from "../redux/reducers/RootReducer";
 const Users = () => {
+  const dispatch = useDispatch();
+  const users = useSelector((state: RootType) => state.user.users);
+  const content = useSelector((state: RootType) => state.userModal.content);
+  const open = useSelector((state: RootType) => state.userModal.isOpen);
+  // const isLoading =;
   const navigate = useNavigate();
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
   const [block, setBlock] = useState<boolean>(false);
   const [userList, setUserList] = useState<IUserData[]>([]);
-  const [content, setContent] = useState<IUserContent>({
-    name: "",
-    id: 0
-  });
+  // const [content, setContent] = useState<IUserContent>({
+  //   name: "",
+  //   id: 0,
+  // });
 
-  // function handleYes() {
-  //   setOpen(!open);
-  // }
-  // function handleNo() {
-  //   setOpen(!open)
-  // }
-
-  async function fetchData() {
-    try {
-      setBlock(true);
-      const temp = await makeRequest<IUserData[]>(userUrl, 'get');
-      setUserList(temp);
-      setBlock(false);
-    } catch (error) {
-      console.error(error);
-    }
+  const onOpenModal = (content: IUserContent) => {
+    dispatch(openUserModal(content))
   }
+
+  const onCloseModal = () => {
+    dispatch(closeUserModal)
+  }
+
   useEffect(() => {
-    fetchData();
+    dispatch(getUsers(userUrl));
   }, []);
   // function goToCreate() {
   //   navigate("create");
@@ -58,7 +51,7 @@ const Users = () => {
     try {
       setBlock(true);
 
-      const response = await makeRequest(`${userUrl}/${id}`,'delete');
+      const response = await makeRequest(`${userUrl}/${id}`, "delete");
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -66,10 +59,10 @@ const Users = () => {
       setBlock(false);
     }
   };
-  function toggleOpen() {
-    setOpen(!open);
-  }
-  function generateContent():ReactElement {
+  // function toggleOpen() {
+  //   setOpen(!open);
+  // }
+  function generateContent(): ReactElement {
     return (
       <div>
         <p>{content.id}</p>
@@ -82,7 +75,7 @@ const Users = () => {
   //   // setContent({...content, id: id });
   //   toggleOpen();
   // }
-  const tableRows = userList.map((user: IUserData, i: number):ReactElement => {
+  const tableRows = users.map((user: IUserData, i: number): ReactElement => {
     // const {  } = user;
     return (
       <Table.Row className="" key={`user${i}`}>
@@ -136,9 +129,10 @@ const Users = () => {
               //   </div>
               // );
 
-              setContent({...content, name: user.name, id: user.id });
+              // setContent({ ...content, name: user.name, id: user.id });
               // handleModalButton(temp);
-              toggleOpen();
+              // toggleOpen();
+              onOpenModal({name: user.name, id:user.id})
             }}
           >
             <Icon name="delete" />
@@ -147,49 +141,45 @@ const Users = () => {
       </Table.Row>
     );
   });
-  if (block) {
-    return <div>Please wait</div>;
+  if ( useSelector((state: RootType) => state.user.loading)) {
+    return <div>Please wait aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>;
   }
   return (
     <div className="container">
-    <UserModal
-      // user={user}
-      title={"Delete User"}
-      content={generateContent()}
-      isOpen={open}
-      toggleOpen={toggleOpen}
-      handleDelete={() => handleDelete(content.id)}
-      // resource="user"
-    />
-    <h1>Users</h1>
-    <Table celled>
-      <Table.Header>
-        <Table.Row className="tableheader">
-          <Table.HeaderCell>User</Table.HeaderCell>
-          <Table.HeaderCell className="tableheader">
-            Email
-          </Table.HeaderCell>
-          <Table.HeaderCell
-            textAlign="center"
-            width={"two"}
-            className="tableheader"
-          >
-            Action
-          </Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>{tableRows}</Table.Body>
-    </Table>
-    <Button
-      color="green"
-      icon
-      onClick={() => navigateToPage("/users/create")}
-    >
-      <Icon name="add" />
-    </Button>
-  </div>
-    
-
+      <UserModal
+        // user={user}
+        title={"Delete User"}
+        content={generateContent()}
+        isOpen={open}
+        toggleOpen={onCloseModal}
+        handleDelete={() => handleDelete(content.id)}
+        // resource="user"
+      />
+      <h1>Users</h1>
+      <Table celled>
+        <Table.Header>
+          <Table.Row className="tableheader">
+            <Table.HeaderCell>User</Table.HeaderCell>
+            <Table.HeaderCell className="tableheader">Email</Table.HeaderCell>
+            <Table.HeaderCell
+              textAlign="center"
+              width={"two"}
+              className="tableheader"
+            >
+              Action
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>{tableRows}</Table.Body>
+      </Table>
+      <Button
+        color="green"
+        icon
+        onClick={() => navigateToPage("/users/create")}
+      >
+        <Icon name="add" />
+      </Button>
+    </div>
   );
 };
 
