@@ -15,14 +15,16 @@ export default function UserModal(props: IModalProps) {
     toggleOpen();
   }
 
-  const onClose = () => {
-    dispatch(closeUserModal)
-  }
-  const open  = useSelector((state: RootType)=> state.userModal.isOpen)
+
+  // const open  = useSelector((state: RootType)=> state.userModal.isOpen)
 
   return (
     <div>
-      <Modal open={open}>
+      <Modal
+        onClose={() => toggleOpen()}
+        onOpen={() => toggleOpen()}
+        open={isOpen}
+      >
         <Modal.Header>{title}</Modal.Header>
         <Modal.Content>
           <Modal.Description>
@@ -30,7 +32,7 @@ export default function UserModal(props: IModalProps) {
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
-          <Button color="black" onClick={onClose}>
+          <Button color="black" onClick={toggleOpen}>
             Nope
           </Button>
           <Button

@@ -11,25 +11,25 @@ import { RootType } from "../redux/reducers/RootReducer";
 const Users = () => {
   const dispatch = useDispatch();
   const users = useSelector((state: RootType) => state.user.users);
-  const content = useSelector((state: RootType) => state.userModal.content);
-  const open = useSelector((state: RootType) => state.userModal.isOpen);
+  // const content = useSelector((state: RootType) => state.userModal.content);
+  // const open = useSelector((state: RootType) => state.userModal.isOpen);
   // const isLoading =;
   const navigate = useNavigate();
-  // const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [block, setBlock] = useState<boolean>(false);
   const [userList, setUserList] = useState<IUserData[]>([]);
-  // const [content, setContent] = useState<IUserContent>({
-  //   name: "",
-  //   id: 0,
-  // });
+  const [content, setContent] = useState<IUserContent>({
+    name: "",
+    id: 0,
+  });
 
-  const onOpenModal = (content: IUserContent) => {
-    dispatch(openUserModal(content))
-  }
+  // const onOpenModal = (content: IUserContent) => {
+  //   dispatch(openUserModal(content))
+  // }
 
-  const onCloseModal = () => {
-    dispatch(closeUserModal)
-  }
+  // const onCloseModal = () => {
+  //   dispatch(closeUserModal)
+  // }
 
   useEffect(() => {
     dispatch(getUsers(userUrl));
@@ -59,9 +59,9 @@ const Users = () => {
       setBlock(false);
     }
   };
-  // function toggleOpen() {
-  //   setOpen(!open);
-  // }
+  function toggleOpen() {
+    setOpen(!open);
+  }
   function generateContent(): ReactElement {
     return (
       <div>
@@ -129,10 +129,10 @@ const Users = () => {
               //   </div>
               // );
 
-              // setContent({ ...content, name: user.name, id: user.id });
+              setContent({ ...content, name: user.name, id: user.id });
               // handleModalButton(temp);
-              // toggleOpen();
-              onOpenModal({name: user.name, id:user.id})
+              toggleOpen();
+              // onOpenModal({name: user.name, id:user.id})
             }}
           >
             <Icon name="delete" />
@@ -151,7 +151,7 @@ const Users = () => {
         title={"Delete User"}
         content={generateContent()}
         isOpen={open}
-        toggleOpen={onCloseModal}
+        toggleOpen={toggleOpen}
         handleDelete={() => handleDelete(content.id)}
         // resource="user"
       />
