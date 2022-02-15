@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, Header } from "semantic-ui-react";
 import { IModalProps } from "../interfaces";
-import { closeUserModal } from "../redux/actions";
 import { RootType } from "../redux/reducers/RootReducer";
 export default function UserModal(props: IModalProps) {
   const dispatch = useDispatch();

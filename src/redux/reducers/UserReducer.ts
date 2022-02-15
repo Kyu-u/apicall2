@@ -18,9 +18,9 @@ export function UserReducer(state: IState = initialState, action: UserActions) {
     case UserActionTypes.GET_USER:
       return { ...state, users: action.payload };
     case UserActionTypes.LOADING:
-      return { ...state, loading: true };
-    case UserActionTypes.SUCCESS:
-      return { ...state, loading: false };
+      return { ...state, loading: action.payload };
+    case UserActionTypes.SET_USER:
+      return {...state, users: action.payload}
     default:
       return state;
   }

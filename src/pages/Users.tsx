@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Icon, Table, Button } from "semantic-ui-react";
 import { userUrl } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { closeUserModal, getUsers, openUserModal } from "../redux/actions";
+import { getUsers, setUsers } from "../redux/actions";
 import { RootType } from "../redux/reducers/RootReducer";
 const Users = () => {
   const dispatch = useDispatch();
@@ -47,18 +47,18 @@ const Users = () => {
     if (user) navigate(path, { state: user });
     else navigate(path);
   }
-  const handleDelete = async (id: number) => {
-    try {
-      setBlock(true);
+  // const handleDelete = async (id: number) => {
+  //   try {
+  //     setBlock(true);
 
-      const response = await makeRequest(`${userUrl}/${id}`, "delete");
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setBlock(false);
-    }
-  };
+  //     const response = await makeRequest(`${userUrl}/${id}`, "delete");
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setBlock(false);
+  //   }
+  // };
   function toggleOpen() {
     setOpen(!open);
   }
@@ -69,6 +69,11 @@ const Users = () => {
         <p>{content.name}</p>
       </div>
     );
+  }
+  function deleteUser() {
+    const temp = users.filter(user => user.id !== content.id);
+    console.log(temp);
+    dispatch(setUsers(temp));
   }
   // function handleModalButton(content, id) {
   //   // setContent(content);
@@ -141,8 +146,13 @@ const Users = () => {
       </Table.Row>
     );
   });
-  if ( useSelector((state: RootType) => state.user.loading)) {
-    return <div>Please wait aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>;
+  if (useSelector((state: RootType) => state.user.loading)) {
+    return (
+      <div>
+        Please wait
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      </div>
+    );
   }
   return (
     <div className="container">
@@ -152,7 +162,7 @@ const Users = () => {
         content={generateContent()}
         isOpen={open}
         toggleOpen={toggleOpen}
-        handleDelete={() => handleDelete(content.id)}
+        handleDelete={deleteUser}
         // resource="user"
       />
       <h1>Users</h1>
