@@ -3,7 +3,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { makeRequest } from "../services";
 import { userUrl } from "../constants";
-import { IUserData, IUserFormData, IUserState } from "../interfaces";
+import { IUserData, IUserFormData } from "../interfaces";
 import { Method } from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { RootType } from "../redux/reducers/RootReducer";

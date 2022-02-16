@@ -4,9 +4,17 @@ import UserModal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 import Paginator from "../components/Pagination";
 import { commentUrl } from "../constants";
-import { Icon, Table, Button,  } from "semantic-ui-react";
+import { Icon, Table, Button } from "semantic-ui-react";
 import { ICommentData } from "../interfaces";
+import { useSelector, useDispatch } from "react-redux";
+import { RootType } from "../redux/reducers/RootReducer";
+import { getComments, setCommentForm, setComments } from "../redux/actions";
 export default function Comments() {
+  const dispatch = useDispatch();
+  const comments = useSelector((state: RootType) => state.comment.comments);
+  const commentFormData = useSelector(
+    (state: RootType) => state.commentFormData
+  );
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -27,11 +35,11 @@ export default function Comments() {
       setBlock(true);
       const temp = await makeRequest<ICommentData[]>(commentUrl, "GET");
       setCommentAmount(temp.length);
-      const temp2 = await makeRequest<ICommentData[]>(
-        `${commentUrl}?_page=${currentPage}`,
-        "GET"
-      );
-      setCommentList(temp2);
+      // const temp2 = await makeRequest<ICommentData[]>(
+      //   `${commentUrl}?_page=${currentPage}`,
+      //   "GET"
+      // );
+      // setCommentList(temp2);
       setBlock(false);
     } catch (error) {
       console.error(error);
@@ -39,23 +47,30 @@ export default function Comments() {
   }
   async function loadPage(page: number) {
     try {
-      setBlock(true);
-      const temp = await makeRequest<ICommentData[]>(`${commentUrl}?_page=${page}`, "GET");
-      setCommentList(temp);
-      setBlock(false);
+      // setBlock(true);
+      // const temp = await makeRequest<ICommentData[]>(
+      //   `${commentUrl}?_page=${page}`,
+      //   "GET"
+      // );
+      // setCommentList(temp);
+      // setBlock(false);
+      dispatch(getComments(`${commentUrl}?_page=${page}`));
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
     }
   }
   useEffect(() => {
-    fetchData();
+    if (comments.length === 0) {
+      fetchData();
+      dispatch(getComments(`${commentUrl}?_page=${currentPage}`));
+    }
     // loadPage();
   }, []);
 
-  function goToCreate() {
-    navigate("create");
-  }
+  // function goToCreate() {
+  //   navigate("create");
+  // }
   function generateContent(): ReactElement {
     return (
       <div>
@@ -70,13 +85,21 @@ export default function Comments() {
     navigate(`${comment.id}`, { state: comment });
   }
   const handleDelete = async (id: number) => {
-    const response = await makeRequest<ICommentData[]>(`${commentUrl}/${id}`, "GET");
+    const response = await makeRequest<ICommentData[]>(
+      `${commentUrl}/${id}`,
+      "GET"
+    );
     console.log(response);
+  };
+  const deleteComment = () => {
+    const temp = comments.filter((comment) => comment.id !== content.id);
+    console.log(temp);
+    dispatch(setComments(temp));
   };
   function toggleOpen() {
     setOpen(!open);
   }
-  const tableRows = commentList.map((comment: ICommentData, i: number) => {
+  const tableRows = comments.map((comment: ICommentData, i: number) => {
     // const {  } = comment;
     return (
       <Table.Row className="" key={`comment${i}`}>
@@ -106,7 +129,17 @@ export default function Comments() {
             size="mini"
             icon
             color="yellow"
-            onClick={() => goToEdit(comment)}
+            onClick={() => {
+              goToEdit(comment);
+              dispatch(
+                setCommentForm({
+                  id: comment.id,
+                  postId: comment.postId,
+                  name: comment.name,
+                  body: comment.body,
+                })
+              );
+            }}
           >
             <Icon name="edit"></Icon>
           </Button>
@@ -149,7 +182,7 @@ export default function Comments() {
         content={generateContent()}
         isOpen={open}
         toggleOpen={toggleOpen}
-        handleDelete={() => handleDelete(content.id)}
+        handleDelete={deleteComment}
         // resource="post"
       />
       <h1>Comments</h1>
@@ -179,9 +212,6 @@ export default function Comments() {
         loadPage={loadPage}
         activePage={currentPage}
       ></Paginator>
-      <Button color="green" icon onClick={goToCreate}>
-        <Icon name="add" />
-      </Button>
     </div>
   );
 }

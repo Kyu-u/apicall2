@@ -1,12 +1,14 @@
 import { Method } from "axios";
 import { Dispatch } from "redux";
 import {
+  ICommentData,
   IPostData,
   IUserContent,
   IUserData,
   IUserFormData,
 } from "../../interfaces";
 import { makeRequest } from "../../services";
+import { CommentActions,  CommentActionTypes } from "../types/CommentActionTypes";
 import { PostActions, PostActionTypes } from "../types/PostActionTypes";
 import { UserActionTypes } from "../types/UserActionTypes";
 import { UserActions } from "../types/UserActionTypes";
@@ -62,3 +64,30 @@ export const setPostForm = (post: IPostData): PostActions => ({
   type: PostActionTypes.SET_POST_FORM,
   payload: post,
 });
+
+const loadingComments = (isLoading: boolean): CommentActions => ({
+  type: CommentActionTypes.LOADING,
+  payload: isLoading,
+});
+
+export const getComments =
+  (url: string) => async (dispatch: Dispatch<CommentActions>) => {
+    try {
+      dispatch(loadingComments(true));
+      const data = await makeRequest<ICommentData[]>(url, "get");
+      dispatch({
+        type: CommentActionTypes.GET_COMMENT,
+        payload: data,
+      });
+      dispatch(loadingComments(false));
+    } catch (error) {}
+  };
+  export const setComments = (commentArray: ICommentData[]): CommentActions => ({
+    type: CommentActionTypes.SET_COMMENT,
+    payload: commentArray,
+  });
+  export const setCommentForm = (comment: ICommentData): CommentActions => ({
+    type: CommentActionTypes.SET_COMMENT_FORM,
+    payload: comment,
+  });
+  

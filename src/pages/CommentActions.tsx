@@ -1,11 +1,20 @@
 import React, { ChangeEvent, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
-import {  makeRequest } from "../services";
+import { makeRequest } from "../services";
 import { commentUrl } from "../constants";
 import { ICommentData } from "../interfaces";
 import { Method } from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { RootType } from "../redux/reducers/RootReducer";
+import { setCommentForm, setComments } from "../redux/actions";
 export default function CommentActions() {
+  const dispatch = useDispatch();
+  const commentFormData = useSelector(
+    (state: RootType) => state.commentFormData
+  );
+
+  const comments = useSelector((state: RootType) => state.comment.comments);
   const params = useParams();
   const location = useLocation();
   const [block, setBlock] = useState<boolean>(false);
@@ -21,11 +30,14 @@ export default function CommentActions() {
   const { name, body } = location.state as ICommentData;
   // console.log(comment2);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const temp = {
-      ...comment,
-      [e.target.name]: e.target.value,
-    };
-    setComment(temp);
+    // const temp = {
+    //   ...comment,
+    //   [e.target.name]: e.target.value,
+    // };
+    // setComment(temp);
+    dispatch(
+      setCommentForm({ ...commentFormData, [e.target.name]: e.target.value })
+    );
   };
 
   // const handleEdit = async () => {
@@ -42,8 +54,7 @@ export default function CommentActions() {
   //   }
   // };
   const handleRequest = async (
-    url: string, 
-
+    url: string,
     method: Method,
     data: ICommentData
   ) => {
@@ -51,6 +62,17 @@ export default function CommentActions() {
       setBlock(true);
       const response = await makeRequest<ICommentData>(url, method, data);
       console.log(response);
+      const temp = comments.map((comment) =>
+        comment.id === commentFormData.id
+          ? {
+              ...comment,
+              name: commentFormData.name,
+              body: commentFormData.body,
+            }
+          : comment
+      );
+      console.log(temp);
+      dispatch(setComments(temp));
     } catch (error) {
       console.log(error);
     } finally {
@@ -60,14 +82,13 @@ export default function CommentActions() {
   return (
     <div className="container">
       <h1>Edit Comment</h1>
-      <h2>{name}</h2>
       <Form>
         <FormField>
           <label htmlFor="name">Name</label>
           <input
             type="text"
             onChange={handleChange}
-            defaultValue={name}
+            defaultValue={commentFormData.name}
             name="name"
             id=""
           />
@@ -77,7 +98,7 @@ export default function CommentActions() {
           <input
             type="text"
             onChange={handleChange}
-            defaultValue={body}
+            defaultValue={commentFormData.body}
             name="body"
             id=""
           />
@@ -85,7 +106,7 @@ export default function CommentActions() {
         <Button
           type="submit"
           onClick={() =>
-            handleRequest(`${commentUrl}/${params.id}`, "put", comment)
+            handleRequest(`${commentUrl}/${params.id}`, "put", commentFormData)
           }
         >
           Update

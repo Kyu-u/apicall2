@@ -15,8 +15,8 @@ export interface IUserFormData {
   email: string;
 }
 export interface IUserState {
-  name: string;
-  email: string;
+  users: IUserData[];
+  loading: boolean;
 }
 
 export interface IPostData {
@@ -41,6 +41,10 @@ export interface ICommentData {
   postId: number;
   name: string;
   body: string;
+}
+export interface ICommentState {
+  comments: ICommentData[],
+  loading: boolean,
 }
 
 export interface IModalProps {
