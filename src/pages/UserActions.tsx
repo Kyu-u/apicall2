@@ -3,28 +3,35 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { FormField, Form, Button } from "semantic-ui-react";
 import { makeRequest } from "../services";
 import { userUrl } from "../constants";
-import { IUserData, IUserState } from "../interfaces";
+import { IUserData, IUserFormData, IUserState } from "../interfaces";
 import { Method } from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { RootType } from "../redux/reducers/RootReducer";
+import { setUserForm, setUsers } from "../redux/actions";
 export default function UserActions() {
-  const location = useLocation();
-  const state = location.state as IUserState;
+  const dispatch = useDispatch();
+  const userFormData = useSelector((state: RootType) => state.userFormData);
+  const users = useSelector((state: RootType) => state.user.users);
+
+  // const state = location.state as IUserState;
   // console.log(state);
   const params = useParams();
   // const userUrl = "https://jsonplaceholder.typicode.com/users";
-  const [user, setUser] = useState<IUserData>({
-    id: 0,
-    name: "",
-    email: "",
-  });
+  // const [user, setUser] = useState<IUserData>({
+  //   id: 0,
+  //   name: "",
+  //   email: "",
+  // });
   const [block, setBlock] = useState<boolean>(false);
 
   // console.log(user2);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const temp = {
-      ...user,
-      [e.target.name]: e.target.value,
-    };
-    setUser(temp);
+    // const temp = {
+    //   ...userFormData,
+    //   [e.target.name]: e.target.value,
+    // };
+    // console.log(temp);
+    dispatch(setUserForm({ ...userFormData, [e.target.name]: e.target.value }));
   };
 
   // const handleEdit = async () => {
@@ -61,6 +68,18 @@ export default function UserActions() {
       setBlock(true);
       const response = await makeRequest<IUserData>(url, method, data);
       console.log(response);
+      if (method === "put") {
+        const temp = users.map((user) =>
+          user.id === userFormData.id
+            ? { ...user, name: userFormData.name, email: userFormData.email }
+            : user
+        );
+        dispatch(setUsers(temp));
+      }
+      if (method === "post") {
+        const temp = [...users, userFormData];
+        dispatch(setUsers(temp));
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -78,14 +97,14 @@ export default function UserActions() {
     return (
       <div className="container">
         <h1>Edit User</h1>
-        <h2>{state.name}</h2>
+        <h2>{userFormData.name}</h2>
         <Form>
           <FormField>
             <label htmlFor="name">Name</label>
             <input
               type="text"
               onChange={handleChange}
-              defaultValue={state.name}
+              defaultValue={userFormData.name}
               name="name"
               id=""
             />
@@ -105,7 +124,7 @@ export default function UserActions() {
             <input
               type="text"
               onChange={handleChange}
-              defaultValue={state.email}
+              defaultValue={userFormData.email}
               name="email"
               id=""
             />
@@ -114,7 +133,7 @@ export default function UserActions() {
           <Button
             type="button"
             onClick={() =>
-              handleRequest(`${userUrl}/${params.id}`, "put", user)
+              handleRequest(`${userUrl}/${params.id}`, "put", userFormData)
             }
           >
             Update
@@ -139,7 +158,7 @@ export default function UserActions() {
 
         <Button
           type="button"
-          onClick={() => handleRequest(userUrl, "post", user)}
+          onClick={() => handleRequest(userUrl, "post", userFormData)}
         >
           Submit
         </Button>

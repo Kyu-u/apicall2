@@ -1,11 +1,16 @@
 import React, { useState, useEffect, ReactElement } from "react";
 import UserModal from "../components/Modal";
 import { makeRequest } from "../services";
-import { useNavigate,  useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Icon, Table, Button } from "semantic-ui-react";
 import { postUrl } from "../constants";
 import { IPostContent, IPostData, IUserData } from "../interfaces";
+import { useDispatch, useSelector } from "react-redux";
+import { RootType } from "../redux/reducers/RootReducer";
+import { getPosts, setPostForm, setPosts } from "../redux/actions";
 export default function Posts() {
+  const dispatch = useDispatch();
+  const posts = useSelector((state: RootType) => state.post.posts);
   const location = useLocation();
   const { name } = location.state as IUserData;
   // const { name } = location.state;
@@ -27,7 +32,10 @@ export default function Posts() {
   async function fetchData() {
     try {
       setBlock(true);
-      const temp = await makeRequest<IPostData[]>(`${postUrl}?userId=${id}`, "get");
+      const temp = await makeRequest<IPostData[]>(
+        `${postUrl}?userId=${id}`,
+        "get"
+      );
       setPostList(temp);
       setBlock(false);
     } catch (error) {
@@ -35,7 +43,8 @@ export default function Posts() {
     }
   }
   useEffect(() => {
-    fetchData();
+    // fetchData();
+    if (posts.length === 0) dispatch(getPosts(`${postUrl}?userId=${id}`));
   }, []);
   // function goToCreate() {
   //   navigate("create", { state: location.state });
@@ -66,7 +75,12 @@ export default function Posts() {
   function toggleOpen() {
     setOpen(!open);
   }
-  function generateContent():ReactElement {
+  function deletePosts() {
+    const temp = posts.filter((post) => post.id !== content.id);
+    console.log(temp);
+    dispatch(setPosts(temp));
+  }
+  function generateContent(): ReactElement {
     return (
       <div>
         <p>{content.id}</p>
@@ -79,7 +93,7 @@ export default function Posts() {
   //   setContent(content);
   //   toggleOpen();
   // }
-  const tableRows = postList.map((post: IPostData, i: number) => {
+  const tableRows = posts.map((post: IPostData, i: number) => {
     // const {  } = post;
     return (
       <Table.Row className="" key={`post${i}`}>
@@ -91,7 +105,12 @@ export default function Posts() {
             size="mini"
             icon
             color="yellow"
-            onClick={() => navigateToPage(`${post.id}`, post)}
+            onClick={() => {
+              navigateToPage(`${post.id}`, post);
+              dispatch(
+                setPostForm({ id: post.id, title: post.title, body: post.body })
+              );
+            }}
           >
             <Icon name="edit"></Icon>
           </Button>
@@ -113,6 +132,7 @@ export default function Posts() {
                 title: post.title,
                 body: post.body,
               });
+
               // handleModalButton(temp);
               toggleOpen();
             }}
@@ -133,7 +153,7 @@ export default function Posts() {
         content={generateContent()}
         isOpen={open}
         toggleOpen={toggleOpen}
-        handleDelete={() => handleDelete(content.id)}
+        handleDelete={deletePosts}
         // resource="post"
       />
       <h1>{name} - Posts</h1>
@@ -155,7 +175,20 @@ export default function Posts() {
         </Table.Header>
         <Table.Body>{tableRows}</Table.Body>
       </Table>
-      <Button color="green" icon onClick={() => navigateToPage("create")}>
+      <Button
+        color="green"
+        icon
+        onClick={() => {
+          navigateToPage("create");
+          dispatch(
+            setPostForm({
+              id: posts[posts.length - 1].id + 1,
+              title: "",
+              body: "",
+            })
+          );
+        }}
+      >
         <Icon name="add" />
       </Button>
     </div>

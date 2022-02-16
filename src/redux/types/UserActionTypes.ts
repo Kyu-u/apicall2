@@ -1,10 +1,10 @@
-import { IUserData } from "../../interfaces";
+import { IUserData, IUserFormData } from "../../interfaces";
 
 export enum UserActionTypes {
   LOADING = "loading",
   GET_USER = "getuser",
   SET_USER = 'setuser',
-
+  SET_USER_FORM = 'setuserform'
 }
 interface GetUserAction {
   type: "getuser";
@@ -21,8 +21,14 @@ interface SetUserAction {
   payload: IUserData[]
 }
 
+interface SetUserFormAction {
+  type: 'setuserform',
+  payload: IUserData
+}
+
 
 export type UserActions =
   | GetUserAction
   | Loading
   | SetUserAction
+  | SetUserFormAction

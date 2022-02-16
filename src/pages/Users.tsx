@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Icon, Table, Button } from "semantic-ui-react";
 import { userUrl } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers, setUsers } from "../redux/actions";
+import { getUsers, setUsers, setUserForm } from "../redux/actions";
 import { RootType } from "../redux/reducers/RootReducer";
 const Users = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,9 @@ const Users = () => {
   // }
 
   useEffect(() => {
-    dispatch(getUsers(userUrl));
+    if (users.length === 0) {
+      dispatch(getUsers(userUrl));
+      }
   }, []);
   // function goToCreate() {
   //   navigate("create");
@@ -71,7 +73,7 @@ const Users = () => {
     );
   }
   function deleteUser() {
-    const temp = users.filter(user => user.id !== content.id);
+    const temp = users.filter((user) => user.id !== content.id);
     console.log(temp);
     dispatch(setUsers(temp));
   }
@@ -108,7 +110,13 @@ const Users = () => {
             size="mini"
             icon
             color="yellow"
-            onClick={() => navigateToPage(`${user.id}`, user)}
+            onClick={() => {
+              navigateToPage(`${user.id}`, user);
+
+              dispatch(
+                setUserForm({ id: user.id, name: user.name, email: user.email })
+              );
+            }}
           >
             <Icon name="edit" />
           </Button>

@@ -10,7 +10,10 @@ export interface IUserContent {
   id: number;
   name: string;
 }
-
+export interface IUserFormData {
+  name: string;
+  email: string;
+}
 export interface IUserState {
   name: string;
   email: string;
@@ -20,6 +23,11 @@ export interface IPostData {
   id: number;
   title: string;
   body: string;
+}
+
+export interface IPostState {
+  posts: IPostData[],
+  loading: boolean
 }
 
 export interface IPostContent {
@@ -55,6 +63,3 @@ export interface IUserResponse {
   email: string;
 }
 
-export interface ISidebarProps {
-  
-}
