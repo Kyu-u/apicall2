@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootType } from "../redux/reducers/RootReducer";
 import { getPosts, setPostForm, setPosts } from "../redux/actions";
 export default function Posts() {
+  const loading = useSelector((state: RootType) => state.post.loading);
+
   const dispatch = useDispatch();
   const posts = useSelector((state: RootType) => state.post.posts);
   const location = useLocation();
@@ -143,7 +145,7 @@ export default function Posts() {
       </Table.Row>
     );
   });
-  if (block) {
+  if (loading) {
     return <div>Please wait</div>;
   }
   return (

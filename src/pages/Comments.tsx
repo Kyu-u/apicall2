@@ -10,6 +10,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootType } from "../redux/reducers/RootReducer";
 import { getComments, setCommentForm, setComments } from "../redux/actions";
 export default function Comments() {
+  const loading = useSelector((state: RootType) => state.comment.loading);
+
   const dispatch = useDispatch();
   const comments = useSelector((state: RootType) => state.comment.comments);
   const commentFormData = useSelector(
@@ -172,7 +174,7 @@ export default function Comments() {
       </Table.Row>
     );
   });
-  if (block) {
+  if (loading) {
     return <div>Please wait</div>;
   }
   return (

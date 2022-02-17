@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUsers, setUsers, setUserForm } from "../redux/actions";
 import { RootType } from "../redux/reducers/RootReducer";
 const Users = () => {
+  const loading = useSelector((state: RootType) => state.user.loading);
   const dispatch = useDispatch();
   const users = useSelector((state: RootType) => state.user.users);
   // const content = useSelector((state: RootType) => state.userModal.content);
@@ -34,7 +35,7 @@ const Users = () => {
   useEffect(() => {
     if (users.length === 0) {
       dispatch(getUsers(userUrl));
-      }
+    }
   }, []);
   // function goToCreate() {
   //   navigate("create");
@@ -154,7 +155,7 @@ const Users = () => {
       </Table.Row>
     );
   });
-  if (useSelector((state: RootType) => state.user.loading)) {
+  if (loading) {
     return (
       <div>
         Please wait
