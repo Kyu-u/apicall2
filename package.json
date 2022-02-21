@@ -47,8 +47,12 @@
       "last 1 safari version"
     ]
   },
+
   "devDependencies": {
     "@redux-devtools/extension": "^3.2.2",
+    "jest": "^27.5.1",
+    "jest-watch-typeahead": "^0.6.5",
+    "msw": "^0.36.8",
     "redux-devtools-extension": "^2.13.9"
   }
 }
