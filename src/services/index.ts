@@ -12,11 +12,13 @@ export async function makeRequest<T>(
   method: Method,
   data?: IUserData | IPostData | ICommentData
 ): Promise<T> {
-  const res = await axios({
-    method,
-    url,
-    data: data,
-  });
+    const res = await axios({
+      method,
+      url,
+      data: data,
+    });
+  
+    return res.data;
 
-  return res.data;
+
 }
