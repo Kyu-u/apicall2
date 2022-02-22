@@ -11,12 +11,10 @@ export default function Paginator(props: IPaginatorProps) {
   };
   
   return (
-    <div>
       <Pagination
         onPageChange={handlePaginationChange}
         activePage={activePage}
         totalPages={commentAmount / 10}
       />
-    </div>
   );
 }

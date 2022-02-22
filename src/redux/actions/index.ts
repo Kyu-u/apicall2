@@ -13,7 +13,7 @@ import { PostActions, PostActionTypes } from "../types/PostActionTypes";
 import { UserActionTypes } from "../types/UserActionTypes";
 import { UserActions } from "../types/UserActionTypes";
 
-const loadingUsers = (isLoading: boolean): UserActions => ({
+export const loadingUsers = (isLoading: boolean): UserActions => ({
   type: UserActionTypes.LOADING,
   payload: isLoading,
 });

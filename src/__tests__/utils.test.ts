@@ -1,7 +1,7 @@
 import { Axios, AxiosError } from "axios";
 import { server } from "../mocks/server";
+import { loadingUsers, setUsers } from "../redux/actions";
 import { makeRequest } from "../services";
-
 describe("Testing API Requests", () => {
   it("get user test", async () => {
     expect(
@@ -21,3 +21,17 @@ describe("Testing API Requests", () => {
     }
   });
 });
+
+describe('Testing Actions', () => {
+  it('Set User Test',() => {
+    const action = setUsers([]);
+    expect(action.payload).toEqual([]);
+  })
+
+  it('Loading Test', () => {
+    const action = loadingUsers(false);
+    expect(action.payload).toBe(false);
+  })
+})
+
+
