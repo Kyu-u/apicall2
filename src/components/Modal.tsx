@@ -31,10 +31,11 @@ export default function UserModal(props: IModalProps) {
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
-          <Button color="black" onClick={toggleOpen}>
+          <Button data-testid="no-button" color="black" onClick={toggleOpen}>
             Nope
           </Button>
           <Button
+            data-testid="yes-button"
             color="red"
             content="Yes"
             labelPosition="right"

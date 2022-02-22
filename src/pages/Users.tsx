@@ -84,6 +84,7 @@ const Users = () => {
   //   toggleOpen();
   // }
   const tableRows = users.map((user: IUserData, i: number): ReactElement => {
+    const delButtonId = `delete-button-${user.id}`
     // const {  } = user;
     return (
       <Table.Row className="" key={`user${i}`}>
@@ -133,6 +134,7 @@ const Users = () => {
             <Icon name="info" />
           </Button>
           <Button
+            data-testid={delButtonId}
             icon
             size="mini"
             onClick={() => {
@@ -191,7 +193,7 @@ const Users = () => {
         </Table.Header>
         <Table.Body>{tableRows}</Table.Body>
       </Table>
-      <Button
+      <Button data-testid="addbutton"
         color="green"
         icon
         onClick={() => navigateToPage("/users/create")}
