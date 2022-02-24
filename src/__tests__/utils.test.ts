@@ -13,6 +13,11 @@ describe("Testing API Requests", () => {
       await makeRequest("https://jsonplaceholder.typicode.com/posts?userId=1", "get")
     ).toHaveLength(10);
   });
+  it("should return 10 comments", async () => {
+    expect(
+      await makeRequest("https://jsonplaceholder.typicode.com/comments?_page=1", "get")
+    ).toHaveLength(10);
+  });
   it("should return 404 error message", async () => {
     try {
       await makeRequest(
