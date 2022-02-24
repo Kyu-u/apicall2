@@ -46,7 +46,7 @@ export default function Posts() {
   }
   useEffect(() => {
     // fetchData();
-    if (posts.length === 0) dispatch(getPosts(`${postUrl}?userId=${id}`));
+    dispatch(getPosts(`${postUrl}?userId=${id}`));
   }, []);
   // function goToCreate() {
   //   navigate("create", { state: location.state });
@@ -96,6 +96,10 @@ export default function Posts() {
   //   toggleOpen();
   // }
   const tableRows = posts.map((post: IPostData, i: number) => {
+    const delButtonId = `delete-button-${post.id}`;
+    const editButtonId = `edit-button-${post.id}`;
+
+
     // const {  } = post;
     return (
       <Table.Row className="" key={`post${i}`}>
@@ -104,6 +108,7 @@ export default function Posts() {
         <Table.Cell className="tablecell">{post.body}</Table.Cell>
         <Table.Cell className="actioncell">
           <Button
+            data-testid={editButtonId}
             size="mini"
             icon
             color="yellow"
@@ -117,6 +122,7 @@ export default function Posts() {
             <Icon name="edit"></Icon>
           </Button>
           <Button
+            data-testid={delButtonId}
             icon
             size="mini"
             onClick={() => {

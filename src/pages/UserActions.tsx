@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootType } from "../redux/reducers/RootReducer";
 import { setUserForm, setUsers } from "../redux/actions";
 export default function UserActions() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userFormData = useSelector((state: RootType) => state.userFormData);
   const users = useSelector((state: RootType) => state.user.users);
@@ -80,6 +81,7 @@ export default function UserActions() {
         const temp = [...users, userFormData];
         dispatch(setUsers(temp));
       }
+      navigate('/users');
     } catch (error) {
       console.log(error);
     } finally {
@@ -131,6 +133,7 @@ export default function UserActions() {
           </FormField>
 
           <Button
+          
             type="button"
             onClick={() =>
               handleRequest(`${userUrl}/${params.id}`, "put", userFormData)
@@ -148,12 +151,12 @@ export default function UserActions() {
       <Form>
         <FormField>
           <label htmlFor="name">Name</label>
-          <input type="text" onChange={handleChange} name="name" id="" />
+          <input type="text" placeholder="Name" onChange={handleChange} name="name"  />
         </FormField>
 
         <FormField>
           <label htmlFor="name">Email</label>
-          <input type="text" onChange={handleChange} name="email" id="" />
+          <input type="text" placeholder="Email" onChange={handleChange} name="email" />
         </FormField>
 
         <Button

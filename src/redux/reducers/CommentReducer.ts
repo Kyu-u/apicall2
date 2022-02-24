@@ -1,7 +1,7 @@
 import { ICommentState } from "../../interfaces";
 import { CommentActions, CommentActionTypes } from "../types/CommentActionTypes";
 
-const initialState = {
+export const initialState = {
   comments: [],
   loading: false,
 };

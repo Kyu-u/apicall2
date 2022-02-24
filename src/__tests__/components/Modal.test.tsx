@@ -4,7 +4,7 @@ import UserModal from "../../components/Modal";
 import { store } from "../../redux";
 
 describe("Modal Test", () => {
-  it("Title test", () => {
+  it("should have 'title' as title", () => {
     const { getByText } = render(
       <Provider store={store}>
         <UserModal

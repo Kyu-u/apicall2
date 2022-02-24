@@ -11,23 +11,21 @@ import CommentActions from "./pages/CommentActions";
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <SidebarComponent />
+      <SidebarComponent />
 
-        <Routes>
-          <Route path="/" element={<Navigate to="/users" replace />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/users/:id" element={<UserActions />} />
-          <Route path="/users/:id/posts" element={<Posts />} />
-          <Route path="/users/:id/posts/:postId" element={<PostActions />} />
-          <Route path="/users/:id/posts/create" element={<PostActions />} />
-          <Route path="/users/create" element={<UserActions />} />
-          <Route path="/posts" element={<Posts />} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/users" replace />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<UserActions />} />
+        <Route path="/users/:id/posts" element={<Posts />} />
+        <Route path="/users/:id/posts/:postId" element={<PostActions />} />
+        <Route path="/users/:id/posts/create" element={<PostActions />} />
+        <Route path="/users/create" element={<UserActions />} />
+        <Route path="/posts" element={<Posts />} />
 
-          <Route path="/comments" element={<Comments />} />
-          <Route path="/comments/:id" element={<CommentActions />} />
-        </Routes>
-      </BrowserRouter>
+        <Route path="/comments" element={<Comments />} />
+        <Route path="/comments/:id" element={<CommentActions />} />
+      </Routes>
     </div>
   );
 }

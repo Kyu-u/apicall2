@@ -102,6 +102,8 @@ export default function Comments() {
     setOpen(!open);
   }
   const tableRows = comments.map((comment: ICommentData, i: number) => {
+    const delButtonId = `delete-button-${comment.id}`;
+    const editButtonId = `edit-button-${comment.id}`;
     // const {  } = comment;
     return (
       <Table.Row className="" key={`comment${i}`}>
@@ -128,6 +130,7 @@ export default function Comments() {
             </Button>
           </Link> */}
           <Button
+            data-testid={editButtonId}
             size="mini"
             icon
             color="yellow"
@@ -146,6 +149,7 @@ export default function Comments() {
             <Icon name="edit"></Icon>
           </Button>
           <Button
+            data-testid={delButtonId}
             icon
             size="mini"
             onClick={() => {

@@ -5,7 +5,7 @@ import { UserActions } from "../types/UserActionTypes";
 
 
 
-const initialState = {
+export const initialState = {
   users: [],
   loading: false,
 };

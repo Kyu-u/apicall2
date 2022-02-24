@@ -39,7 +39,7 @@ export const setUserForm = (user: IUserData): UserActions => ({
   type: UserActionTypes.SET_USER_FORM,
   payload: user,
 });
-const loadingPosts = (isLoading: boolean): PostActions => ({
+export const loadingPosts = (isLoading: boolean): PostActions => ({
   type: PostActionTypes.LOADING,
   payload: isLoading,
 });
@@ -65,7 +65,7 @@ export const setPostForm = (post: IPostData): PostActions => ({
   payload: post,
 });
 
-const loadingComments = (isLoading: boolean): CommentActions => ({
+ export const loadingComments = (isLoading: boolean): CommentActions => ({
   type: CommentActionTypes.LOADING,
   payload: isLoading,
 });

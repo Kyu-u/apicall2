@@ -75,7 +75,7 @@ const Users = () => {
   }
   function deleteUser() {
     const temp = users.filter((user) => user.id !== content.id);
-    console.log(temp);
+    // console.log(temp);
     dispatch(setUsers(temp));
   }
   // function handleModalButton(content, id) {
@@ -84,7 +84,9 @@ const Users = () => {
   //   toggleOpen();
   // }
   const tableRows = users.map((user: IUserData, i: number): ReactElement => {
-    const delButtonId = `delete-button-${user.id}`
+    const delButtonId = `delete-button-${user.id}`;
+    const editButtonId = `edit-button-${user.id}`;
+    const infoButtonId = `info-button-${user.id}`;
     // const {  } = user;
     return (
       <Table.Row className="" key={`user${i}`}>
@@ -109,6 +111,7 @@ const Users = () => {
             </Button>
           </Link> */}
           <Button
+            data-testid={editButtonId}
             size="mini"
             icon
             color="yellow"
@@ -124,6 +127,7 @@ const Users = () => {
           </Button>
 
           <Button
+            data-testid={infoButtonId}
             icon
             size="mini"
             color="grey"

@@ -1,7 +1,7 @@
 import { IPostState } from "../../interfaces";
 import { PostActions, PostActionTypes } from "../types/PostActionTypes";
 
-const initialState = {
+export const initialState = {
   posts: [],
   loading: false,
 };
