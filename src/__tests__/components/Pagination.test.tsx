@@ -1,17 +1,17 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import Paginator from "../../components/Pagination";
 
 describe("Paginator Tests", () => {
   it("First Page Test", () => {
+    const mockFunction = jest.fn();
     render(
-      <Paginator commentAmount={500} loadPage={() => {}} activePage={1} />
+      <Paginator commentAmount={500} loadPage={mockFunction} activePage={1} />
     );
-    const navigation = screen.queryByRole("navigation");
-    const firstItemButton = screen.getByLabelText("First item");
-    const prevButton = screen.getByLabelText("Previous item");
-
-
-    // expect(firstItemButton).toHaveAttribute('aria-disabled', 'false');
+    const navigation = screen.getByRole("navigation");
+    const { getByText } = within(navigation);
+    const pageOneButton = getByText('1');
+    // screen.debug(getByText('1'));
+    expect(pageOneButton).toHaveAttribute('aria-current', 'true');
     // expect(prevButton).toBeDisabled();
   });
 });

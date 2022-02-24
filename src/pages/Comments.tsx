@@ -36,6 +36,7 @@ export default function Comments() {
     try {
       setBlock(true);
       const temp = await makeRequest<ICommentData[]>(commentUrl, "GET");
+      console.log(temp.length);
       setCommentAmount(temp.length);
       // const temp2 = await makeRequest<ICommentData[]>(
       //   `${commentUrl}?_page=${currentPage}`,
@@ -191,7 +192,7 @@ export default function Comments() {
         handleDelete={deleteComment}
         // resource="post"
       />
-      <h1>Comments</h1>
+      <h1>Comments - {currentPage}</h1>
       <Table celled>
         <Table.Header>
           <Table.Row className="tableheader">
