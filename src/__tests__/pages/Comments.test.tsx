@@ -1,7 +1,7 @@
 import Comments from "../../pages/Comments";
 import { store } from "../../redux";
 import UserEvent from "@testing-library/user-event";
-import { render, screen, within } from "@testing-library/react";
+import { findByText, render, screen, within } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
@@ -56,17 +56,17 @@ describe('Comments Page Test', () => {
   it('should change to page 2 on paginator button click', async() => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={['/comments']}>
-          <App/>
-        </MemoryRouter>
+        <BrowserRouter >
+          <Comments/>
+        </BrowserRouter>
       </Provider>
     );
     // screen.getByRole('');
     const navigation = await screen.findByRole("navigation");
-    const { getByText } = within(navigation);
-    const pageTwoButton = getByText('2');
+    screen.debug(navigation);
+    const pageTwoButton = await within(navigation).findByText('»');
     userEvent.click(pageTwoButton);
-    expect(await screen.findByRole('heading', { name: 'Comments - 2' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Comments - 50' })).toBeInTheDocument();
     expect(pageTwoButton).toHaveAttribute('aria-current', 'true');
   })
 })

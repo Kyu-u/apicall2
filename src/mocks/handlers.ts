@@ -3,7 +3,7 @@ import { commentUrl, postUrl, userUrl } from "../constants";
 import { ICommentData, IUserData } from "../interfaces";
 import { dummyCommentsTotal } from "./constants/Comments";
 export const handlers = [
-  rest.get('https://jsonplaceholder.typicode.com/users', (req, res, ctx) =>
+  rest.get("https://jsonplaceholder.typicode.com/users", (req, res, ctx) =>
     res(
       ctx.status(200),
       ctx.json([
@@ -240,7 +240,8 @@ export const handlers = [
       ])
     )
   ),
-  rest.get('https://jsonplaceholder.typicode.com/posts?userId=1', (req, res, ctx) => {
+  rest.get("https://jsonplaceholder.typicode.com/posts", (req, res, ctx) => {
+    const userId = req.url.searchParams.get("userId");
     return res(
       ctx.status(200),
       ctx.json([
@@ -308,7 +309,9 @@ export const handlers = [
       ])
     );
   }),
-  rest.get('https://jsonplaceholder.typicode.com/comments?_page=1', (req, res, ctx) => {
+  rest.get("https://jsonplaceholder.typicode.com/comments", (req, res, ctx) => {
+    const commentPage = req.url.searchParams.get("_page");
+    if (!commentPage) return res(ctx.status(200), ctx.json(dummyCommentsTotal));
     return res(
       ctx.status(200),
       ctx.json([
@@ -385,13 +388,13 @@ export const handlers = [
       ])
     );
   }),
-  rest.put('https://jsonplaceholder.typicode.com/users/1', (req, res, ctx) => {
+  rest.put("https://jsonplaceholder.typicode.com/users/1", (req, res, ctx) => {
     return res(ctx.status(200));
   }),
   // rest.get('https://jsonplaceholder.typicode.com/comments', (req, res, ctx) => {
   //   return res(ctx.status(200), ctx.json(dummyCommentsTotal));
   // }),
-  rest.post('https://jsonplaceholder.typicode.com/users', (req, res, ctx) => {
+  rest.post("https://jsonplaceholder.typicode.com/users", (req, res, ctx) => {
     return res(ctx.status(200));
   }),
   rest.get("*", (req, res, ctx) => {

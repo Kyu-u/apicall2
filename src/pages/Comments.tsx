@@ -36,7 +36,6 @@ export default function Comments() {
     try {
       setBlock(true);
       const temp = await makeRequest<ICommentData[]>(commentUrl, "GET");
-      console.log(temp.length);
       setCommentAmount(temp.length);
       // const temp2 = await makeRequest<ICommentData[]>(
       //   `${commentUrl}?_page=${currentPage}`,
