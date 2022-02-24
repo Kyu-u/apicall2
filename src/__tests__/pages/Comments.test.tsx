@@ -64,9 +64,9 @@ describe('Comments Page Test', () => {
     // screen.getByRole('');
     const navigation = await screen.findByRole("navigation");
     screen.debug(navigation);
-    const pageTwoButton = await within(navigation).findByText('»');
+    const pageTwoButton = await within(navigation).findByText('2');
     userEvent.click(pageTwoButton);
-    expect(await screen.findByRole('heading', { name: 'Comments - 50' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Comments - 2' })).toBeInTheDocument();
     expect(pageTwoButton).toHaveAttribute('aria-current', 'true');
   })
 })
