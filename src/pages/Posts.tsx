@@ -79,7 +79,7 @@ export default function Posts() {
   }
   function deletePosts() {
     const temp = posts.filter((post) => post.id !== content.id);
-    console.log(temp);
+    // console.log(temp);
     dispatch(setPosts(temp));
   }
   function generateContent(): ReactElement {

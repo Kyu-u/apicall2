@@ -23,7 +23,9 @@ export default function Comments() {
   const [block, setBlock] = useState<boolean>(false);
   const [commentList, setCommentList] = useState<ICommentData[]>([]);
   const [commentAmount, setCommentAmount] = useState<number>(0);
+  // console.log(commentAmount);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  console.log('CURRENT PAGE',currentPage);
   const [content, setContent] = useState<ICommentData>({
     id: 0,
     postId: 0,
@@ -63,7 +65,7 @@ export default function Comments() {
     }
   }
   useEffect(() => {
-    if (comments.length === 0) {
+    if (commentAmount===0) {
       fetchData();
       dispatch(getComments(`${commentUrl}?_page=${currentPage}`));
     }
@@ -97,6 +99,7 @@ export default function Comments() {
     const temp = comments.filter((comment) => comment.id !== content.id);
     console.log(temp);
     dispatch(setComments(temp));
+    setCommentAmount(commentAmount - 1);
   };
   function toggleOpen() {
     setOpen(!open);

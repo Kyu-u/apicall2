@@ -11,7 +11,7 @@ describe("Paginator Tests", () => {
     const { getByText } = within(navigation);
     const pageOneButton = getByText('1');
     // screen.debug(getByText('1'));
-    expect(pageOneButton).toHaveAttribute('aria-current', 'true');
+    expect(pageOneButton).toHaveClass('active');
     // expect(prevButton).toBeDisabled();
   });
 });
