@@ -3,7 +3,7 @@ import { Pagination, PaginationProps } from "semantic-ui-react";
 import { IPaginatorProps } from "../interfaces";
 export default function Paginator(props: IPaginatorProps) {
   const { commentAmount, loadPage, activePage } = props;
-  console.log('PAGINATOR PROPS', commentAmount, activePage);
+  // console.log('PAGINATOR PROPS', commentAmount, activePage);
   const handlePaginationChange = (
     event: MouseEvent<HTMLAnchorElement>,
     { activePage }: PaginationProps

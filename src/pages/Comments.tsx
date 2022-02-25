@@ -25,7 +25,7 @@ export default function Comments() {
   const [commentAmount, setCommentAmount] = useState<number>(0);
   // console.log(commentAmount);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  console.log('CURRENT PAGE',currentPage);
+  // console.log('CURRENT PAGE',currentPage);
   const [content, setContent] = useState<ICommentData>({
     id: 0,
     postId: 0,
@@ -97,7 +97,7 @@ export default function Comments() {
   };
   const deleteComment = () => {
     const temp = comments.filter((comment) => comment.id !== content.id);
-    console.log(temp);
+    // console.log(temp);
     dispatch(setComments(temp));
     setCommentAmount(commentAmount - 1);
   };

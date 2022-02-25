@@ -20,8 +20,10 @@ describe("Testing User Actions Page", () => {
 
     userEvent.click(await screen.findByTestId("addbutton"));
     // screen.debug();
-    
-    expect(await screen.findByRole('button', {name: /Submit/i})).toBeInTheDocument();
+
+    expect(
+      await screen.findByRole("button", { name: /Submit/i })
+    ).toBeInTheDocument();
   });
   it("should add user on submit", async () => {
     render(
@@ -34,11 +36,11 @@ describe("Testing User Actions Page", () => {
 
     userEvent.click(await screen.findByTestId("addbutton"));
     // screen.debug();
-    userEvent.type(screen.getByPlaceholderText('Name'), 'john');
-    userEvent.type(screen.getByPlaceholderText('Email'), 'doe@gmail.com');
+    userEvent.type(screen.getByPlaceholderText("Name"), "john");
+    userEvent.type(screen.getByPlaceholderText("Email"), "doe@gmail.com");
 
-    userEvent.click(screen.getByRole('button', { name: /Submit/i }));
-    expect(await screen.findByText('john')).toBeInTheDocument();
+    userEvent.click(screen.getByRole("button", { name: /Submit/i }));
+    expect(await screen.findByText("john")).toBeInTheDocument();
   });
   it("should autofill UserActions page", async () => {
     render(
@@ -51,7 +53,6 @@ describe("Testing User Actions Page", () => {
 
     userEvent.click(await screen.findByTestId("edit-button-1"));
     expect(await screen.findByText(/Leanne Graham/i)).toBeInTheDocument();
-    userEvent.type(await screen.findByDisplayValue(/Leanne Graham/i), "new");
   });
   it("should update user on Users page", async () => {
     render(
@@ -65,7 +66,26 @@ describe("Testing User Actions Page", () => {
     userEvent.click(await screen.findByTestId("edit-button-1"));
     userEvent.type(await screen.findByDisplayValue(/Leanne Graham/i), "new");
     // screen.debug();
-    userEvent.click(screen.getByRole('button'));
+    userEvent.click(screen.getByRole("button"));
     expect(await screen.findByText(/Leanne Grahamnew/i)).toBeInTheDocument();
+  });
+});
+
+describe("Testing UserActions Inputs", () => {
+  it("should update textbox value", async () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    userEvent.click(await screen.findByTestId("edit-button-1"));
+    userEvent.type(
+      await screen.findByDisplayValue(/Leanne Graham/i),
+      "{selectall}new"
+    );
+    expect(screen.getByDisplayValue("new")).toHaveValue("new");
   });
 });
