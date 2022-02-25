@@ -29,11 +29,11 @@ describe("Users Page Testing", () => {
     );
     const delButton = await screen.findByTestId("delete-button-1");
     UserEvent.click(delButton);
-    expect(await screen.findByText("Delete User")).toBeInTheDocument();
+    expect(await screen.findByText("Delete User")).toBeVisible();
 
     const noButton = await screen.findByTestId("no-button");
     UserEvent.click(noButton);
-    expect(await screen.findByText("Leanne Graham")).toBeInTheDocument();
+    expect(await screen.findByText("Leanne Graham")).toBeVisible();
 
     // expect(await screen.findByText('Leanne Graham')).toBeInTheDocument();
   });
@@ -47,7 +47,6 @@ describe("Users Page Testing", () => {
     );
     const delButton = await screen.findByTestId("delete-button-1");
     UserEvent.click(delButton);
-    expect(await screen.findByText("Delete User")).toBeInTheDocument();
 
     const yesButton = await screen.findByTestId("yes-button");
     UserEvent.click(yesButton);
